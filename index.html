@@ -5,28 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Attack of the Doodles</title>
-    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- link below renderds my doodles -->
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+    <!-- link below is the actual API  that we're importing-->
+    <script
+      type="text/javascript"
+      src="node_modules/iink-js/dist/iink.min.js"
+    ></script>
+
+    <link rel="stylesheet" href="css/main.css" />
+
+    <script src="js/app.js" defer></script>
   </head>
   <body>
-    <header>ATTACK OF THE DOODLES</header>
-    <main>
-      <div>
-        <div id="lifemeter"></div>
-        <!-- <div id="instructions">INSTRUCTIONS</div> -->
-        <!-- <div id="chatbox">CHAT BOX</div> -->
-        <!-- <div id="scoreboard">SCORE:</div> -->
-      </div>
-      <div>
-        <div id="champion"></div>
-      </div>
-      <div>
-        <!-- <div id="badguy"></div> -->
-      </div>
-    </main>
-    <footer>
-      <button id="start">START</button>
-    </footer>
-    <script src="js/app.js"></script>
-    <script src="js/sandbox.js"></script>
+    <!-- div below will hold our drawing pad (layer) -->
+    <div id="editor" touch-action="none"></div>
   </body>
 </html>

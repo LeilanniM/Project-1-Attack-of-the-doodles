@@ -1,34 +1,38 @@
-// class Badguy {
-//   constructor(name) {
-//     this.name = name;
-//   }
-// }
+const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
 
-// const badguy1 = new Badguy(); //instantiating first badguy
+const configuration = {
+  //required by the API (as instructed by documentation)
+  recognitionParams: {
+    iink: {
+      gesture: {
+        enable: false, //turning magic gestures OFF
+      },
+      text: {
+        guides: {
+          enable: false, //removing the 'paper guideLines'
+        },
+        smartGuide: false, //turning OFF 'suggestions bar'
+      },
+    },
+    type: "TEXT",
+    protocol: "WEBSOCKET",
+    server: {
+      applicationKey: "5dc4c089-2061-4520-8bbd-019a9d19cb02",
+      hmacKey: "b21b60ca-b781-44a4-88d9-ca3272228d86",
+    },
+  },
+};
 
-//add eventlistener for START button:
+const pencilTheme = {
+  ink: {
+    //where we're styling our pen/pencil/brush.....
+    color: "#0080ffbd",
+    "-myscript-pen-width": 5,
+  },
+  ".text": {
+    //where we're styling the text
+    "font-size": 10,
+  },
+};
 
-const start = document.querySelector("#start");
-start.addEventListener("click", spawn);
-
-//section 1:
-const main = document.querySelector("main");
-const badguy = document.createElement("div"); //creating a div for badguy
-main.appendChild(badguy); //appending it to main
-badguy.setAttribute("id", "badguy");
-
-//section 2:
-function spawn() {
-  setTimeout(() => {
-    badguy.classList.toggle("badguySpawns"); //turnON badguy (appears)
-    setTimeout(() => {
-      badguy.classList.toggle("badguyMoves"); //turnON badguyMoves
-      setTimeout(() => {
-        badguy.removeAttribute("class"); //turnOFF badguy1 & badguyMoves
-      }, 3000);
-    }, 1000);
-  }, 500);
-}
-
-//what do I want?
-//I want section 1 and section 2 to happen for
+iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad API object
