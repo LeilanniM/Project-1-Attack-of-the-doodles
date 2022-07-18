@@ -1,4 +1,100 @@
-#editor {
-  width: 100vw;
+* {
+  box-sizing: border-box;
+}
+
+#results {
+  border: solid 2px black;
+  border-radius: 10px;
+  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  width: 200px;
+  height: 50px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-top: 10px;
+}
+
+main {
+  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  background-size: cover;
+  border: solid 2px gray;
+  border-radius: 10px;
+  width: 1000px;
   height: calc(100vh - 152px);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+#editor {
+  border: solid 2px black;
+  border-radius: 10px;
+
+  width: 1000px;
+  height: calc(100vh - 152px);
+  position: absolute;
+}
+
+#champion {
+  position: absolute;
+  width: 130px;
+  height: 172px;
+  top: 246px;
+  left: 443px;
+  background-color: blue;
+}
+
+.badguySpawns {
+  position: absolute;
+  width: 130px;
+  height: 172px;
+  top: 10px;
+  left: 850px;
+  background-color: red;
+}
+
+.badguyMoves {
+  animation: slide 3s linear;
+}
+
+@keyframes slide {
+  0% {
+  }
+
+  100% {
+    top: 156px;
+    left: 533px;
+  }
+}
+
+/* Footer & inside of Footer  */
+
+footer {
+  border: solid 4px rgb(137, 134, 134);
+  border-radius: 12px;
+  height: 70px;
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  background-size: cover;
+}
+
+/* Inside of footer: */
+
+#start {
+  border: solid 4px rgb(137, 134, 134);
+
+  border-radius: 12px;
+  text-align: center;
+  height: 47px;
+  width: 94px;
+  margin-top: 9px;
+  margin-left: 401px;
+}
+
+button {
+  background-color: rgb(211, 239, 239);
+  color: rgb(137, 134, 134);
 }

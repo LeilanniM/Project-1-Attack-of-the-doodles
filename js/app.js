@@ -1,4 +1,33 @@
+//=========================================================================
+//DOCUMENTATION INSTRUCTIONS AND METHODS
+
 const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
+
+const results = document.querySelector("#results");
+
+//I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
+
+editorElement.addEventListener("exported", (event) => {
+  let apiResults = JSON.parse(
+    event.detail.exports["application/vnd.myscript.jiix"] //capturing apiResults
+  );
+  console.log(apiResults);
+  //putting a listener for after a stroke has been exported to the recog cloud. This is where we can access info about the exported item, including the recognition results/ candidates.
+  if (apiResults.label !== "") {
+    //.detail was instructed by them. | If event has details:
+    console.log(event);
+
+    // editorElement.editor.clear(); //API method for clearing the 'drawing pad' of any stroke before anything else is drawn. (parft of documentation, not JS keywords or JS vanilla methods)
+    let candidates = apiResults.words[0].candidates; // ====================================> these are the candidates *******************
+    console.log(candidates);
+    results.innerHTML = candidates;
+
+    if (candidates.length > 0) {
+      iink.InkModel.clearModel(editorElement.editor.model); //this will clear the model containing stroke info after ONE STROKE,
+      editorElement.editor.clear(); //this will clear the actual screen
+    }
+  }
+}); //end of exported event listener
 
 const configuration = {
   //required by the API (as instructed by documentation)
@@ -36,3 +65,29 @@ const pencilTheme = {
 };
 
 iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad API object
+
+//==========================================================================
+
+const start = document.querySelector("#start");
+start.addEventListener("click", () => {
+  spawn(badguy1);
+});
+
+//section 1:
+const main = document.querySelector("main");
+const badguy1 = document.createElement("div"); //creating a div for badguy
+main.appendChild(badguy1); //appending it to main
+badguy1.setAttribute("id", "badguy");
+
+//section 2:
+function spawn(badguy) {
+  setTimeout(() => {
+    badguy.classList.toggle("badguySpawns"); //turnON badguy (appears)
+    setTimeout(() => {
+      badguy.classList.toggle("badguyMoves"); //turnON badguyMoves
+      setTimeout(() => {
+        badguy.removeAttribute("class"); //turnOFF badguy & badguyMoves
+      }, 3000);
+    }, 1000);
+  }, 500);
+}
