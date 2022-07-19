@@ -14,7 +14,7 @@ class Enemy {
   }
 }
 
-const enemyData1 = new Enemy(["-", "|", "^", "v"], "enemyData1", 483, 866); //instantiating our first enemyData
+const enemyData1 = new Enemy(["|"], "enemyData1", 483, 866); //instantiating our first enemyData
 // console.log(enemyData1);
 
 function enemyFactory(enemy) {
@@ -27,22 +27,14 @@ function enemyFactory(enemy) {
 
   let ul = document.createElement("ul");
   ul.setAttribute("class", "signs");
-  div.appendChild(ul);
 
-  let lis = [];
-
-  lis.push(document.createElement("li"));
-  lis[0].innerHTML = enemy.signs[0];
-  lis.push(document.createElement("li"));
-  lis[1].innerHTML = enemy.signs[1];
-  lis.push(document.createElement("li"));
-  lis[2].innerHTML = enemy.signs[2];
-  lis.push(document.createElement("li"));
-  lis[3].innerHTML = enemy.signs[3];
-
-  lis.forEach((element) => {
-    ul.appendChild(element);
+  enemy.signs.forEach((element) => {
+    let li = document.createElement("li");
+    li.innerHTML = element;
+    ul.appendChild(li);
   });
+
+  div.appendChild(ul);
 
   console.log(div);
   return div;
@@ -50,6 +42,14 @@ function enemyFactory(enemy) {
 
 let enemy1 = enemyFactory(enemyData1); //capturing our first enemy with enemyData1
 main.appendChild(enemy1);
+
+setTimeout(() => {
+  enemy1.classList.add("enemyMoves");
+}, 1000);
+
+setTimeout(() => {
+  enemy1.remove(); //this will be his attack
+}, 5000);
 
 //I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
 

@@ -63,7 +63,20 @@ main {
   font-size: 20px;
 }
 
-#baddie2 {
+.enemyMoves {
+  animation: slides 4s linear;
+}
+
+@keyframes slides {
+  0% {
+  }
+  100% {
+    top: 274px;
+    left: 499px;
+  }
+}
+
+/* #baddie2 {
   left: 866px;
 }
 
@@ -74,7 +87,7 @@ main {
 #baddie4 {
   top: 483px;
   left: 866px;
-}
+} */
 
 .signs {
   position: absolute;
