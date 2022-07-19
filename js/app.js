@@ -5,6 +5,8 @@ const baddie2 = document.querySelector("#baddie2");
 
 const main = document.querySelector("main");
 
+//=================== ENEMY CLASS ================================================
+
 class Enemy {
   constructor(signs, id, top, left) {
     this.signs = signs; //array
@@ -14,8 +16,7 @@ class Enemy {
   }
 }
 
-const enemyData1 = new Enemy(["|"], "enemyData1", 483, 866); //instantiating our first enemyData
-// console.log(enemyData1);
+//================== ENEMY FACTORY ==============================================
 
 function enemyFactory(enemy) {
   let div = document.createElement("div");
@@ -40,16 +41,72 @@ function enemyFactory(enemy) {
   return div;
 } //end of enemyFacotry
 
-let enemy1 = enemyFactory(enemyData1); //capturing our first enemy with enemyData1
-main.appendChild(enemy1);
+//===================== VERTICAL ENEMY  =====================================================
+
+const verticalEnemyData = new Enemy(["|"], "verticalEnemy", 483, 866); //instantiating our first enemyData
+// console.log(verticalEnemyData);
+
+let verticalEnemy = enemyFactory(verticalEnemyData); //capturing our first enemy with verticalEnemyData
+main.appendChild(verticalEnemy);
 
 setTimeout(() => {
-  enemy1.classList.add("enemyMoves");
+  verticalEnemy.classList.add("verticalEnemyMoves");
 }, 1000);
 
 setTimeout(() => {
-  enemy1.remove(); //this will be his attack
+  verticalEnemy.remove(); //this will be his attack
 }, 5000);
+
+//========================== HORIZONTAL ENEMY  =============================================
+
+const horizontalEnemyData = new Enemy(["-"], "horizontalEnemy", 483, 0);
+
+let horizontalEnemy = enemyFactory(horizontalEnemyData);
+main.appendChild(horizontalEnemy);
+
+setTimeout(() => {
+  horizontalEnemy.classList.add("horizontalEnemyMoves");
+}, 2000);
+
+setTimeout(() => {
+  horizontalEnemy.remove();
+}, 6000);
+
+//=============================UP ARROW ENEMY =======================================
+
+const upArrowEnemyData = new Enemy(["^"], "upArrowEnemy", 34, 0);
+
+let upArrowEnemy = enemyFactory(upArrowEnemyData);
+main.appendChild(upArrowEnemy);
+
+setTimeout(() => {
+  upArrowEnemy.classList.add("upArrowEnemyMoves");
+}, 3000);
+
+setTimeout(() => {
+  upArrowEnemy.remove();
+}, 7000);
+
+//================================DOWN ARROW ENEMY ========================================
+
+const downArrowEnemyData = new Enemy(["v"], "downArrowEnemy", 34, 868);
+
+let downArrowEnemy = enemyFactory(downArrowEnemyData);
+main.appendChild(downArrowEnemy);
+
+setTimeout(() => {
+  downArrowEnemy.classList.add("downArrowEnemyMoves");
+}, 4000);
+
+setTimeout(() => {
+  downArrowEnemy.remove();
+}, 8000);
+
+//=========================================================================================
+/* ROUND 2  RESPAWN */
+//=========================================================================================
+
+//========================================================================================
 
 //I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
 
@@ -85,7 +142,7 @@ editorElement.addEventListener("exported", (event) => {
         console.log(
           `valid vertical stroke, it matches our bestGuess: ${element}`
         );
-        baddie1.remove();
+        verticalEnemy.remove();
         // badguy.removeAttribute("class"); // <----- UNCOMMENT WHEN WE HAVE BADGUY READY
         //if stroke matches one of our elements in the array, badguy will 'dissapear'
       }
@@ -96,7 +153,7 @@ editorElement.addEventListener("exported", (event) => {
         console.log(
           `valid horizontal stroke, it matches our best guess: ${element}`
         );
-        baddie2.remove();
+        horizontalEnemy.remove();
       }
     });
 
@@ -105,7 +162,7 @@ editorElement.addEventListener("exported", (event) => {
         console.log(
           `valid up Arrow stroke, it matches our best guess: ${element}`
         );
-        baddie3.remove();
+        upArrowEnemy.remove();
       }
     });
 
@@ -114,7 +171,7 @@ editorElement.addEventListener("exported", (event) => {
         console.log(
           `valid down Arrow stroke, it matches our best guess ${element}`
         );
-        baddie4.remove();
+        downArrowEnemy.remove();
       }
     });
 

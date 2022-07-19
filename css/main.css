@@ -63,11 +63,11 @@ main {
   font-size: 20px;
 }
 
-.enemyMoves {
-  animation: slides 4s linear;
+.verticalEnemyMoves {
+  animation: horizontalSlides 4s linear;
 }
 
-@keyframes slides {
+@keyframes horizontalSlides {
   0% {
   }
   100% {
@@ -76,18 +76,45 @@ main {
   }
 }
 
-/* #baddie2 {
-  left: 866px;
+.horizontalEnemyMoves {
+  animation: verticalSlides 4s linear;
 }
 
-#baddie3 {
-  top: 484px;
+@keyframes verticalSlides {
+  0% {
+  }
+  100% {
+    top: 305px;
+    left: 367px;
+  }
 }
 
-#baddie4 {
-  top: 483px;
-  left: 866px;
-} */
+.upArrowEnemyMoves {
+  animation: upArrowSlides 4s linear;
+}
+
+@keyframes upArrowSlides {
+  0% {
+  }
+  100% {
+    top: 173px;
+    left: 409px;
+  }
+}
+
+.downArrowEnemyMoves {
+  animation: downArrowSlides 4s linear;
+}
+
+@keyframes downArrowSlides {
+  0% {
+  }
+
+  100% {
+    top: 206px;
+    left: 488px;
+  }
+}
 
 .signs {
   position: absolute;
