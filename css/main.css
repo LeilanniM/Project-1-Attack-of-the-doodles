@@ -2,10 +2,16 @@
   box-sizing: border-box;
 }
 
+body {
+  background-image: URL("../images/bodybackground.webp");
+}
+
 #results {
   border: solid 2px black;
+  background-image: URL("../images/yellownotepad.webp");
+
   border-radius: 10px;
-  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  background-color: white;
   width: 200px;
   height: 50px;
   margin-bottom: 10px;
@@ -16,12 +22,13 @@
 }
 
 main {
-  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  background-color: white;
+  background-image: URL("../images/yellownotepad.webp");
   background-size: cover;
   border: solid 2px gray;
   border-radius: 10px;
   width: 1000px;
-  height: calc(100vh - 152px);
+  height: 659px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -32,7 +39,7 @@ main {
   border-radius: 10px;
 
   width: 1000px;
-  height: calc(100vh - 152px);
+  height: 659px;
   position: absolute;
 }
 
@@ -45,40 +52,55 @@ main {
   background-color: blue;
 }
 
-.badguySpawns {
-  position: absolute;
+.enemyCss {
+  border: solid black 2px;
   width: 130px;
   height: 172px;
-  top: 10px;
-  left: 850px;
   background-color: red;
+  position: absolute;
+  text-align: center;
+  padding-top: 15px;
+  font-size: 20px;
 }
 
-.badguyMoves {
-  animation: slide 3s linear;
+#baddie2 {
+  left: 866px;
 }
 
-@keyframes slide {
-  0% {
-  }
+#baddie3 {
+  top: 484px;
+}
 
-  100% {
-    top: 156px;
-    left: 533px;
-  }
+#baddie4 {
+  top: 483px;
+  left: 866px;
+}
+
+.signs {
+  position: absolute;
+  top: -53px;
+  left: -4px;
+  font-size: 20px;
+  list-style: none;
+}
+
+li {
+  display: inline-block;
 }
 
 /* Footer & inside of Footer  */
 
 footer {
-  border: solid 4px rgb(137, 134, 134);
+  /* border: solid 4px rgb(137, 134, 134); */
   border-radius: 12px;
   height: 70px;
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  background-image: URL("../images/Graph-paper-no-wrinkles.jpeg");
+  margin-top: 10px;
+  /* background-color: white; */
   background-size: cover;
+  /* background-image: URL("../images/yellownotepad.webp"); */
 }
 
 /* Inside of footer: */
@@ -91,10 +113,11 @@ footer {
   height: 47px;
   width: 94px;
   margin-top: 9px;
-  margin-left: 401px;
+  margin-left: 468px;
 }
 
 button {
   background-color: rgb(211, 239, 239);
   color: rgb(137, 134, 134);
+  margin-left: 454px;
 }
