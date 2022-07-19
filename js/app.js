@@ -61,8 +61,10 @@ setTimeout(() => {
 
 const horizontalEnemyData = new Enemy(["-"], "horizontalEnemy", 483, 0);
 
-let horizontalEnemy = enemyFactory(horizontalEnemyData);
-main.appendChild(horizontalEnemy);
+setTimeout(() => {
+  let horizontalEnemy = enemyFactory(horizontalEnemyData);
+  main.appendChild(horizontalEnemy);
+}, 1000);
 
 setTimeout(() => {
   horizontalEnemy.classList.add("horizontalEnemyMoves");
@@ -76,8 +78,10 @@ setTimeout(() => {
 
 const upArrowEnemyData = new Enemy(["^"], "upArrowEnemy", 34, 0);
 
-let upArrowEnemy = enemyFactory(upArrowEnemyData);
-main.appendChild(upArrowEnemy);
+setTimeout(() => {
+  let upArrowEnemy = enemyFactory(upArrowEnemyData);
+  main.appendChild(upArrowEnemy);
+}, 2000);
 
 setTimeout(() => {
   upArrowEnemy.classList.add("upArrowEnemyMoves");
@@ -91,8 +95,10 @@ setTimeout(() => {
 
 const downArrowEnemyData = new Enemy(["v"], "downArrowEnemy", 34, 868);
 
-let downArrowEnemy = enemyFactory(downArrowEnemyData);
-main.appendChild(downArrowEnemy);
+setTimeout(() => {
+  let downArrowEnemy = enemyFactory(downArrowEnemyData);
+  main.appendChild(downArrowEnemy);
+}, 3000);
 
 setTimeout(() => {
   downArrowEnemy.classList.add("downArrowEnemyMoves");
