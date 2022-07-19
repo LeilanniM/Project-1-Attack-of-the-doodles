@@ -1,122 +1,4 @@
-const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
-const results = document.querySelector("#results"); //temporary
-const baddie1 = document.querySelector("#baddie1");
-const baddie2 = document.querySelector("#baddie2");
-
-const main = document.querySelector("main");
-
-//=================== ENEMY CLASS ================================================
-
-class Enemy {
-  constructor(signs, id, top, left) {
-    this.signs = signs; //array
-    this.id = id;
-    this.top = top;
-    this.left = left;
-  }
-}
-
-//================== ENEMY FACTORY ==============================================
-
-function enemyFactory(enemy) {
-  let div = document.createElement("div");
-  div.classList.add("enemyCss");
-  div.setAttribute("id", enemy.id);
-  // div.style.position = "absolute";
-  div.style.top = `${enemy.top}px`;
-  div.style.left = `${enemy.left}px`;
-
-  let ul = document.createElement("ul");
-  ul.setAttribute("class", "signs");
-
-  enemy.signs.forEach((element) => {
-    let li = document.createElement("li");
-    li.innerHTML = element;
-    ul.appendChild(li);
-  });
-
-  div.appendChild(ul);
-
-  console.log(div);
-  return div;
-} //end of enemyFacotry
-
-//===================== VERTICAL ENEMY  =====================================================
-
-const verticalEnemyData = new Enemy(["|"], "verticalEnemy", 483, 866); //instantiating our first enemyData
-// console.log(verticalEnemyData);
-
-let verticalEnemy = enemyFactory(verticalEnemyData); //capturing our first enemy with verticalEnemyData
-main.appendChild(verticalEnemy);
-
-setTimeout(() => {
-  verticalEnemy.classList.add("verticalEnemyMoves");
-}, 1000);
-
-setTimeout(() => {
-  verticalEnemy.remove(); //this will be his attack
-}, 5000);
-
-//========================== HORIZONTAL ENEMY  =============================================
-
-const horizontalEnemyData = new Enemy(["-"], "horizontalEnemy", 483, 0);
-
-setTimeout(() => {
-  let horizontalEnemy = enemyFactory(horizontalEnemyData);
-  main.appendChild(horizontalEnemy);
-}, 1000);
-
-setTimeout(() => {
-  horizontalEnemy.classList.add("horizontalEnemyMoves");
-}, 2000);
-
-setTimeout(() => {
-  horizontalEnemy.remove();
-}, 6000);
-
-//=============================UP ARROW ENEMY =======================================
-
-const upArrowEnemyData = new Enemy(["^"], "upArrowEnemy", 34, 0);
-
-setTimeout(() => {
-  let upArrowEnemy = enemyFactory(upArrowEnemyData);
-  main.appendChild(upArrowEnemy);
-}, 2000);
-
-setTimeout(() => {
-  upArrowEnemy.classList.add("upArrowEnemyMoves");
-}, 3000);
-
-setTimeout(() => {
-  upArrowEnemy.remove();
-}, 7000);
-
-//================================DOWN ARROW ENEMY ========================================
-
-const downArrowEnemyData = new Enemy(["v"], "downArrowEnemy", 34, 868);
-
-setTimeout(() => {
-  let downArrowEnemy = enemyFactory(downArrowEnemyData);
-  main.appendChild(downArrowEnemy);
-}, 3000);
-
-setTimeout(() => {
-  downArrowEnemy.classList.add("downArrowEnemyMoves");
-}, 4000);
-
-setTimeout(() => {
-  downArrowEnemy.remove();
-}, 8000);
-
-//=========================================================================================
-/* ROUND 2  RESPAWN */
-//=========================================================================================
-
-//========================================================================================
-
-//I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
-
-//Global access:
+//================================ Global access: ====================================================
 let candidates;
 let apiResults;
 const verticalLineArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
@@ -124,6 +6,15 @@ const horizontalStrokeArray = ["-", "_"];
 const upArrowArray = ["^", "n", "A", "~"];
 const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
+
+const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
+const results = document.querySelector("#results"); //temporary
+
+const main = document.querySelector("main");
+
+//============================== EDITOR (DRAWING PAD) =======================================
+
+//I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
 
 //'exported' is an event listener that listens for the stroke
 //putting a listener for after a stroke has been exported to the recog cloud. This is where we can access info about the exported item, including the recognition results/ candidates.
@@ -143,49 +34,7 @@ editorElement.addEventListener("exported", (event) => {
 
     //============
 
-    verticalLineArray.find((element) => {
-      if (element === apiResults.label) {
-        console.log(
-          `valid vertical stroke, it matches our bestGuess: ${element}`
-        );
-        verticalEnemy.remove();
-        // badguy.removeAttribute("class"); // <----- UNCOMMENT WHEN WE HAVE BADGUY READY
-        //if stroke matches one of our elements in the array, badguy will 'dissapear'
-      }
-    });
-
-    horizontalStrokeArray.find((element) => {
-      if (element === apiResults.label) {
-        console.log(
-          `valid horizontal stroke, it matches our best guess: ${element}`
-        );
-        horizontalEnemy.remove();
-      }
-    });
-
-    upArrowArray.find((element) => {
-      if (element === apiResults.label) {
-        console.log(
-          `valid up Arrow stroke, it matches our best guess: ${element}`
-        );
-        upArrowEnemy.remove();
-      }
-    });
-
-    downArrowArray.find((element) => {
-      if (element === apiResults.label) {
-        console.log(
-          `valid down Arrow stroke, it matches our best guess ${element}`
-        );
-        downArrowEnemy.remove();
-      }
-    });
-
-    heartArray.find((element) => {
-      if (element === apiResults.label) {
-        console.log(`valid heart, it matches our best guess ${element}`);
-      }
-    });
+    //this is where our badguys use to die
 
     //============
 
@@ -201,7 +50,7 @@ editorElement.addEventListener("exported", (event) => {
   }
 }); //end of exported event listener
 
-//=========================================================================
+//==========================================
 //API SETUP (required by API docs)
 
 const configuration = {
@@ -241,18 +90,75 @@ const pencilTheme = {
 
 iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad/API object
 
-//==========================================================================
+//=================== ENEMY CLASS ========================================================
 
-//Object Reference
-// const apiResults2 = {
-//   type: "Text",
-//   label: "l",
-//   words: [
-//     {
-//       label: "l",
-//       candidates: ["l", "I", "1", "\\", "/"],
-//     },
-//   ],
-//   version: "3",
-//   id: "MainBlock",
-// };
+class Enemy {
+  constructor(type, signs, id, top, left) {
+    this.type = type; //Single sign OR Combo
+    this.signs = signs; //array
+    this.id = id; //not sure if necessary
+    this.top = top;
+    this.left = left;
+    this.isDead = false;
+  }
+
+  spawn() {
+    //appears on screen
+  }
+
+  getsCreatedInHtml() {
+    //like in enemyFactory()
+  }
+
+  doodleAttack() {
+    //by touching champion
+  }
+} //end of class
+
+//================ CHAMPION CLASS ========================================================
+
+class Champion {
+  constructor(name) {
+    this.name;
+    this.hearts = 5;
+    this.points = 0;
+    this.attacks = {
+      verticalAttack: () => {
+        verticalLineArray.find((element) => {
+          if (element === apiResults.label) {
+            //eliminate Vertical enemy
+            console.log(`vertical enemy has been eliminates`);
+          }
+        });
+      },
+      horizontalAttack: () => {
+        horizontalStrokeArray.find((element) => {
+          if (element === apiResults.label) {
+            //eliminate Horizontal enemy
+            console.log(`horizontal enemy has been eliminates`);
+          }
+        });
+      },
+      upArrowAttack: () => {
+        upArrowArray.find((element) => {
+          if (element === apiResults.label) {
+            //eliminate upArrow enemy
+            console.log(`uparrow enemy has been eliminated`);
+          }
+        });
+      },
+      downArrowAttack: () => {
+        downArrowArray.find((element) => {
+          if (element === apiResults.label) {
+            //eliminate downArrow enemy
+            console.log(`downArrow enemy has been eliminated`);
+          }
+        });
+      },
+    }; //object with attacks ends
+  }
+
+  attack() {
+    //draws enemy's sign
+  }
+}
