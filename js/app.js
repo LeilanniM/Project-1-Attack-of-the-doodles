@@ -1,52 +1,115 @@
+//============ Reference for understanding apiResults path ============
+// words = [
+//   {
+//     label: "l",
+//     candidates: ["l", "I", "1", "/", "i"],
+//   },
+// ];
+
 //================================ Global access: ====================================================
 let candidates;
 let apiResults;
-const verticalLineArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
-const horizontalStrokeArray = ["-", "_"];
+let label; //it is the API's bestGuess
+const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
+const horizontalArray = ["-", "_"];
 const upArrowArray = ["^", "n", "A", "~"];
 const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
+const championDiv = document.querySelector("#champion"); //grabbing champion DIV
 const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
 const results = document.querySelector("#results"); //temporary
 
 const main = document.querySelector("main");
 
-//============================== EDITOR (DRAWING PAD) =======================================
+//=================== ENEMY CLASS ========================================================
 
-//I want each stroke to be analized by the recognition software individually, regardless of other strokes being drawn right after (otherwise itll combine them and treat them all as one):
+class Enemy {
+  constructor(type, signs, id, top, left) {
+    this.type = type; //Single sign OR Combo signs
+    this.signs = signs; //array
+    this.id = id; //not sure if necessary
+    this.top = top;
+    this.left = left;
+    this.isDead = false;
+  }
 
-//'exported' is an event listener that listens for the stroke
-//putting a listener for after a stroke has been exported to the recog cloud. This is where we can access info about the exported item, including the recognition results/ candidates.
+  spawn() {
+    //appears on screen
+  }
+
+  getsCreatedInHtml() {
+    //like in enemyFactory()
+  }
+
+  doodleAttack() {
+    //by touching champion
+  }
+} //end of class
+
+//===================== INSTANTIATING VERTICAL ENEMY ===============
+
+const verticalEnemy = new Enemy("single", "|", "verticalEnemy", 0, 0);
+
+//================ CHAMPION CLASS ========================================================
+
+class Champion {
+  constructor(name) {
+    this.name;
+    this.hearts = 5; //aka lives/health
+    this.points = 0;
+  } //end of constructor
+
+  attack() {
+    if (verticalArray.find((element) => element === label)) {
+      console.log("You vertically attacked the enemy");
+      //verticalEnemy shall disappear
+    } else if (horizontalArray.find((element) => element === label)) {
+      console.log("You horizontally attacked the enemy");
+      //horizontalEnemy shall disappear
+    } else if (upArrowArray.find((element) => element === label)) {
+      console.log("You upArrow attacked the enemy");
+      //upArrowEnemy shall disappear
+    } else if (downArrowArray.find((element) => element === label)) {
+      console.log("You downArrow attacked the enemy");
+      //downArrowEnemy shall disappear
+    }
+  } //end of a method
+} //end of class
+
+//================== INSTANTIATING OUR CHAMPION ========================
+
+const doodleMaster = new Champion("champion");
+
+/*============================== EDITOR (DRAWING PAD) =======================================
+
+//'EXPORTED' is an event listener that listens for the stroke.
+//putting an eventListener for after a stroke has been exported to the recog cloud. 
+//This is where we can access info about the exported item, including the recognition results/ candidates. */
+
+//ANYTHING INSIDE OF THE EVENT LISTENER WILL ONLY HAPPEN IF WE DRAW ANYTHING ON THE SCREEN!!!!!!!!!!!!!
 
 editorElement.addEventListener("exported", (event) => {
-  // console.log(event.detail.exports["application/vnd.myscript.jiix"]); //before it is parsed it is in the form of a string
+  //our results are sent back as a string, so .parse will turn them back into an Object so we can access it through Dot-Notation:
+
   apiResults = JSON.parse(
     event.detail.exports["application/vnd.myscript.jiix"] //capturing apiResults //path in object
   );
 
-  console.log(apiResults);
-
-  //the 'exported' event happens even when it just loads or anything changes on the screen AKA even when strokes aren't being made. We do not want our code to work/run when there are no strokes being made, so we are adding an if statement that will filter that:
-
   if (apiResults.label !== "") {
-    // console.log(event);
+    //the code belowe will only happen if our label is returned NOT EMPTY:
+    console.log(apiResults);
 
-    //============
+    label = apiResults.label;
+    console.log(label);
 
-    //this is where our badguys use to die
+    //I want each stroke to be analized individually, otherwise itll combine them and try to read them as ONE:
 
-    //============
+    iink.InkModel.clearModel(editorElement.editor.model);
 
-    // editorElement.editor.clear(); //API method for clearing the 'drawing pad' of any stroke before anything else is drawn. (parft of documentation, not JS keywords or JS vanilla methods)
-    candidates = apiResults.words[0].candidates; // ====================================> these are the candidates *******************
-    console.log(candidates);
-    results.innerHTML = candidates;
+    editorElement.editor.clear();
 
-    if (candidates.length > 0) {
-      iink.InkModel.clearModel(editorElement.editor.model); //this will clear the model containing stroke info after ONE STROKE,
-      editorElement.editor.clear(); //this will clear the actual screen
-    }
+    doodleMaster.attack();
   }
 }); //end of exported event listener
 
@@ -89,76 +152,3 @@ const pencilTheme = {
 };
 
 iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad/API object
-
-//=================== ENEMY CLASS ========================================================
-
-class Enemy {
-  constructor(type, signs, id, top, left) {
-    this.type = type; //Single sign OR Combo
-    this.signs = signs; //array
-    this.id = id; //not sure if necessary
-    this.top = top;
-    this.left = left;
-    this.isDead = false;
-  }
-
-  spawn() {
-    //appears on screen
-  }
-
-  getsCreatedInHtml() {
-    //like in enemyFactory()
-  }
-
-  doodleAttack() {
-    //by touching champion
-  }
-} //end of class
-
-//================ CHAMPION CLASS ========================================================
-
-class Champion {
-  constructor(name) {
-    this.name;
-    this.hearts = 5;
-    this.points = 0;
-    this.attacks = {
-      verticalAttack: () => {
-        verticalLineArray.find((element) => {
-          if (element === apiResults.label) {
-            //eliminate Vertical enemy
-            console.log(`vertical enemy has been eliminates`);
-          }
-        });
-      },
-      horizontalAttack: () => {
-        horizontalStrokeArray.find((element) => {
-          if (element === apiResults.label) {
-            //eliminate Horizontal enemy
-            console.log(`horizontal enemy has been eliminates`);
-          }
-        });
-      },
-      upArrowAttack: () => {
-        upArrowArray.find((element) => {
-          if (element === apiResults.label) {
-            //eliminate upArrow enemy
-            console.log(`uparrow enemy has been eliminated`);
-          }
-        });
-      },
-      downArrowAttack: () => {
-        downArrowArray.find((element) => {
-          if (element === apiResults.label) {
-            //eliminate downArrow enemy
-            console.log(`downArrow enemy has been eliminated`);
-          }
-        });
-      },
-    }; //object with attacks ends
-  }
-
-  attack() {
-    //draws enemy's sign
-  }
-}
