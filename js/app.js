@@ -6,15 +6,36 @@
 //   },
 // ];
 
+//=================================== FORMULA FOR TRACKING OFFSETS ===================================
+
+Object.defineProperty(Element.prototype, "documentOffsetTop", {
+  get: function () {
+    return (
+      this.offsetTop +
+      (this.offsetParent ? this.offsetParent.documentOffsetTop : 0)
+    );
+  },
+});
+
+Object.defineProperty(Element.prototype, "documentOffsetLeft", {
+  get: function () {
+    return (
+      this.offsetLeft +
+      (this.offsetParent ? this.offsetParent.documentOffsetLeft : 0)
+    );
+  },
+});
+
+// let x = enemy.documentOffsetLeft;
+
+// console.log(x);
+
 //================================ Global access: ====================================================
 let candidates;
 let apiResults;
 let userAttack; //it is the API's bestGuess
 let enemyDiv;
-// const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
-// const horizontalArray = ["-", "_"];
-// const upArrowArray = ["^", "n", "A", "~"];
-// const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
+
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
 const championDiv = document.querySelector("#champion"); //grabbing champion DIV
@@ -24,6 +45,7 @@ const lifeMeter = document.querySelector("#lifeMeter"); //temporary
 
 const main = document.querySelector("main");
 
+const gameOver = document.querySelector(".gameOver");
 //===================================== ENEMIES ARRAY =====================================
 
 let enemiesArray = [];
@@ -79,41 +101,31 @@ class Enemy {
     }, 1000);
 
     setTimeout(() => {
-      console.log(enemy.style.top);
+      this.attack();
       enemy.remove();
     }, 5000);
   } //end of moves()
 
   attack() {
     let enemy = document.getElementById(this.id);
-    if (enemy.style.top === "274px") {
-      doodleChampion.hearts = doodleChampion.hearts - 1;
-      lifeMeter.innerHTML = doodleChampion.hearts;
+    if (enemy) {
+      let leftOffset = enemy.documentOffsetLeft;
+      // console.log(leftOffset);
+      //=======
+      if (leftOffset >= 670 || leftOffset <= 675) {
+        doodleChampion.hearts = doodleChampion.hearts - 1;
+        lifeMeter.innerHTML = doodleChampion.hearts;
+        //=======
+        if (doodleChampion.hearts === 0) {
+          championDiv.remove();
+
+          gameOver.classList.add("overlay");
+          gameOver.innerHTML = "GAME OVER";
+        }
+      }
     }
-  }
+  } //end of attack()
 } //end of class
-
-Object.defineProperty(Element.prototype, "documentOffsetTop", {
-  get: function () {
-    return (
-      this.offsetTop +
-      (this.offsetParent ? this.offsetParent.documentOffsetTop : 0)
-    );
-  },
-});
-
-Object.defineProperty(Element.prototype, "documentOffsetLeft", {
-  get: function () {
-    return (
-      this.offsetLeft +
-      (this.offsetParent ? this.offsetParent.documentOffsetLeft : 0)
-    );
-  },
-});
-
-// let x = bad.documentOffsetLeft;
-
-// console.log(x);
 
 //===================== INSTANTIATING VERTICAL ENEMY ====================================
 
@@ -139,8 +151,9 @@ const downArrowEnemy = new Enemy("single", ["v"], "downArrowEnemy", 485, 869);
 class Champion {
   constructor(name) {
     this.name;
-    this.hearts = 5; //aka lives/health
+    this.hearts = 4; //aka lives/health
     this.points = 0;
+    this.isDead = false; //so far not using it........................REMOVE
   } //end of constructor
 
   attack() {

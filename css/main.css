@@ -138,3 +138,21 @@ button {
   color: rgb(137, 134, 134);
   margin-left: 454px;
 }
+
+/* =========================== OVERLAY FOR GAME OVER =========================== */
+
+.overlay {
+  position: absolute; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  pointer-events: none; /* Looked up how to make OVERLAY not Clickable. */
+
+  /* innerHTML styling */
+  text-align: center;
+  padding-top: 270px;
+  font-size: 100px;
+}
