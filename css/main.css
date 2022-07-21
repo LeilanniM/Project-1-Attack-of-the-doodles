@@ -6,7 +6,7 @@ body {
   background-image: URL("../images/bodybackground.webp");
 }
 
-#score {
+#scoreBoard {
   border: solid 2px black;
   background-image: URL("../images/yellownotepad.webp");
   border-radius: 10px;

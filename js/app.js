@@ -40,7 +40,7 @@ const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
 const championDiv = document.querySelector("#champion"); //grabbing champion DIV
 const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
-const score = document.querySelector("#score"); //temporary
+const scoreBoard = document.querySelector("#scoreBoard"); //temporary
 const lifeMeter = document.querySelector("#lifeMeter"); //temporary
 
 const main = document.querySelector("main");
@@ -152,7 +152,7 @@ class Champion {
   constructor(name) {
     this.name;
     this.hearts = 4; //aka lives/health
-    this.points = 0;
+    this.score = 0;
     this.isDead = false; //so far not using it........................REMOVE
   } //end of constructor
 
@@ -172,6 +172,8 @@ class Champion {
             if (enemy.signs[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
+              this.score += 100;
+              scoreBoard.innerHTML = this.score;
               enemy.isDead = true;
             }
           });
@@ -187,6 +189,9 @@ class Champion {
             if (enemy.signs[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
+              this.score += 100;
+              scoreBoard.innerHTML = this.score;
+
               enemy.isDead = true;
             }
           });
@@ -202,6 +207,8 @@ class Champion {
             if (enemy.signs[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
+              this.score += 100;
+              scoreBoard.innerHTML = this.score;
               enemy.isDead = true;
             }
           });
@@ -217,11 +224,18 @@ class Champion {
             if (enemy.signs[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
+              this.score += 100;
+              scoreBoard.innerHTML = this.score;
               enemy.isDead = true;
             }
           });
         }
       });
+    }
+
+    if (this.score === 400) {
+      gameOver.classList.add("overlay");
+      gameOver.innerHTML = "LEVEL CLEARED, YOU WIN... for now";
     }
   } //end of a method
 } //end of class
