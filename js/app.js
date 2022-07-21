@@ -39,6 +39,7 @@ let enemyDiv;
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
 const championDiv = document.querySelector("#champion"); //grabbing champion DIV
+
 const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
 const scoreBoard = document.querySelector("#scoreBoard"); //temporary
 const lifeMeter = document.querySelector("#lifeMeter"); //temporary
@@ -114,7 +115,7 @@ class Enemy {
       //=======
       if (leftOffset >= 670 || leftOffset <= 675) {
         doodleChampion.hearts = doodleChampion.hearts - 1;
-        lifeMeter.innerHTML = doodleChampion.hearts;
+        lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
         //=======
         if (doodleChampion.hearts === 0) {
           championDiv.remove();
@@ -173,8 +174,10 @@ class Champion {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
-              scoreBoard.innerHTML = this.score;
+              scoreBoard.innerHTML = `SCORE: ${this.score}`;
               enemy.isDead = true;
+
+              //Use .filter to remove them from the array
             }
           });
         }
@@ -190,7 +193,7 @@ class Champion {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
-              scoreBoard.innerHTML = this.score;
+              scoreBoard.innerHTML = `SCORE: ${this.score}`;
 
               enemy.isDead = true;
             }
@@ -208,7 +211,7 @@ class Champion {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
-              scoreBoard.innerHTML = this.score;
+              scoreBoard.innerHTML = `SCORE: ${this.score}`;
               enemy.isDead = true;
             }
           });
@@ -225,7 +228,7 @@ class Champion {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
-              scoreBoard.innerHTML = this.score;
+              scoreBoard.innerHTML = `SCORE: ${this.score}`;
               enemy.isDead = true;
             }
           });
@@ -235,15 +238,17 @@ class Champion {
 
     if (this.score === 400) {
       gameOver.classList.add("overlay");
-      gameOver.innerHTML = "LEVEL CLEARED, YOU WIN... for now";
+      gameOver.innerHTML = "LEVEL CLEARED";
     }
   } //end of a method
+
+  spawn() {} //end of spawn() method
 } //end of class
 
 //================== INSTANTIATING OUR CHAMPION ==========================================
 
-const doodleChampion = new Champion("champion");
-lifeMeter.innerHTML = doodleChampion.hearts;
+const doodleChampion = new Champion("champion"); // 'champion' goes to this.name but it is irrelevant for now.
+lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
 
 //=================================== START BUTTON ======================================
 

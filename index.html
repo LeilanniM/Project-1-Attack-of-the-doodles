@@ -13,22 +13,30 @@
       type="text/javascript"
       src="node_modules/iink-js/dist/iink.min.js"
     ></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Modak&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/main.css" />
 
     <script src="js/app.js" defer></script>
   </head>
   <body>
-    <div id="scoreBoard"></div>
-    <div id="lifeMeter"></div>
+    <header>
+      <div id="gameTitle">ATTACK OF THE DOODLES</div>
+    </header>
+    <div id="stats">
+      <div id="scoreBoard">SCORE: 0</div>
+      <div id="lifeMeter">HEARTS: 4</div>
+      <!-- <button id="start">START</button> -->
+    </div>
     <main>
       <!-- div below will hold our drawing pad (layer) -->
       <div id="editor" touch-action="none"></div>
       <div id="champion"></div>
       <div class="gameOver"></div>
     </main>
-    <footer>
-      <button id="start">START</button>
-    </footer>
   </body>
 </html>

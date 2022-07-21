@@ -3,53 +3,88 @@
 }
 
 body {
-  background-image: URL("../images/bodybackground.webp");
+  background-image: URL("../images/aa91412eb4e0cb9f9a8670dbb6f12867.png");
+  background-size: cover;
+}
+
+#gameTitle {
+  text-align: center;
+  /* padding-top: 270px; */
+  font-size: 100px;
+  font-family: "Modak", cursive;
+  color: #6b5656;
+  margin-bottom: -33px;
+}
+/*======================================*/
+
+#stats {
+  /* border: solid 2px gray; */
+  /* border-radius: 10px; */
+  position: relative;
+  height: 100px;
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Modak", cursive;
+  color: #6b5656;
+  font-size: 35px;
 }
 
 #scoreBoard {
-  border: solid 2px black;
-  background-image: URL("../images/yellownotepad.webp");
+  border: solid 15px gray;
   border-radius: 10px;
+  /* background-image: URL("../images/yellownotepad.webp"); */
   background-color: white;
-  width: 200px;
-  height: 50px;
+  width: 486px;
+  height: 68px;
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  padding-top: 10px;
+  padding-top: -13px;
+
+  position: absolute;
+  top: 10px;
+  left: -2px;
 }
 
 #lifeMeter {
-  border: solid 2px black;
-  background-image: URL("../images/yellownotepad.webp");
+  border: solid 15px gray;
   border-radius: 10px;
+  /* background-image: URL("../images/yellownotepad.webp"); */
   background-color: white;
-  width: 200px;
-  height: 50px;
+  width: 487px;
+  height: 68px;
   margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  padding-top: 10px;
+  padding-top: -13px;
+
+  position: absolute;
+  top: 10px;
+  left: 510px;
 }
+
+/*======================================*/
 
 main {
   background-color: white;
-  background-image: URL("../images/yellownotepad.webp");
+  background-image: URL("../images/aesthetic-anime-04.jpeg");
   background-size: cover;
-  border: solid 2px gray;
+  border: solid 18px rgb(128, 128, 128);
   border-radius: 10px;
   width: 1000px;
   height: 659px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: -12px;
   position: relative;
 }
 
 #editor {
-  border: solid 2px black;
-  border-radius: 10px;
+  /* border: solid 10px gray; */
+  /* border-radius: 10px; */
 
   width: 1000px;
   height: 659px;
@@ -122,23 +157,6 @@ footer {
 
 /* Inside of footer: */
 
-#start {
-  border: solid 4px rgb(137, 134, 134);
-
-  border-radius: 12px;
-  text-align: center;
-  height: 47px;
-  width: 94px;
-  margin-top: 9px;
-  margin-left: 468px;
-}
-
-button {
-  background-color: rgb(211, 239, 239);
-  color: rgb(137, 134, 134);
-  margin-left: 454px;
-}
-
 /* =========================== OVERLAY FOR GAME OVER =========================== */
 
 .overlay {
@@ -147,7 +165,7 @@ button {
   height: 100%; /* Full height (cover the whole page) */
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  background-color: rgba(0, 0, 0, 0.34); /* Black background with opacity */
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
   pointer-events: none; /* Looked up how to make OVERLAY not Clickable. */
 
@@ -155,4 +173,6 @@ button {
   text-align: center;
   padding-top: 270px;
   font-size: 100px;
+  font-family: "Modak", cursive;
+  color: #6b5656;
 }
