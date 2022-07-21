@@ -6,10 +6,23 @@ body {
   background-image: URL("../images/bodybackground.webp");
 }
 
-#results {
+#score {
   border: solid 2px black;
   background-image: URL("../images/yellownotepad.webp");
+  border-radius: 10px;
+  background-color: white;
+  width: 200px;
+  height: 50px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-top: 10px;
+}
 
+#lifeMeter {
+  border: solid 2px black;
+  background-image: URL("../images/yellownotepad.webp");
   border-radius: 10px;
   background-color: white;
   width: 200px;
@@ -48,9 +61,11 @@ main {
   width: 130px;
   height: 172px;
   top: 246px;
-  left: 443px;
+  left: 466px;
   background-color: blue;
 }
+
+/*====================================== ENEMIES =========================================*/
 
 .enemyCss {
   border: solid black 2px;
@@ -63,11 +78,11 @@ main {
   font-size: 20px;
 }
 
-.verticalEnemyMoves {
-  animation: horizontalSlides 4s linear;
+.enemyMoves {
+  animation: slides 4s linear;
 }
 
-@keyframes horizontalSlides {
+@keyframes slides {
   0% {
   }
   100% {
@@ -76,45 +91,7 @@ main {
   }
 }
 
-.horizontalEnemyMoves {
-  animation: verticalSlides 4s linear;
-}
-
-@keyframes verticalSlides {
-  0% {
-  }
-  100% {
-    top: 305px;
-    left: 367px;
-  }
-}
-
-.upArrowEnemyMoves {
-  animation: upArrowSlides 4s linear;
-}
-
-@keyframes upArrowSlides {
-  0% {
-  }
-  100% {
-    top: 173px;
-    left: 409px;
-  }
-}
-
-.downArrowEnemyMoves {
-  animation: downArrowSlides 4s linear;
-}
-
-@keyframes downArrowSlides {
-  0% {
-  }
-
-  100% {
-    top: 206px;
-    left: 488px;
-  }
-}
+/*=======================================================================================*/
 
 .signs {
   position: absolute;
@@ -128,7 +105,7 @@ li {
   display: inline-block;
 }
 
-/* Footer & inside of Footer  */
+/* ========================= Footer & inside of Footer ================================ */
 
 footer {
   /* border: solid 4px rgb(137, 134, 134); */

@@ -1,4 +1,4 @@
-//============ Reference for understanding apiResults path ============
+//============ Reference for understanding apiResults path ========================================
 // words = [
 //   {
 //     label: "l",
@@ -9,18 +9,24 @@
 //================================ Global access: ====================================================
 let candidates;
 let apiResults;
-let label; //it is the API's bestGuess
-const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
-const horizontalArray = ["-", "_"];
-const upArrowArray = ["^", "n", "A", "~"];
-const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
+let userAttack; //it is the API's bestGuess
+let enemyDiv;
+// const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
+// const horizontalArray = ["-", "_"];
+// const upArrowArray = ["^", "n", "A", "~"];
+// const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
 const championDiv = document.querySelector("#champion"); //grabbing champion DIV
 const editorElement = document.getElementById("editor"); // grabbing DIV with "editor" ID
-const results = document.querySelector("#results"); //temporary
+const score = document.querySelector("#score"); //temporary
+const lifeMeter = document.querySelector("#lifeMeter"); //temporary
 
 const main = document.querySelector("main");
+
+//===================================== ENEMIES ARRAY =====================================
+
+let enemiesArray = [];
 
 //=================== ENEMY CLASS ========================================================
 
@@ -36,22 +42,99 @@ class Enemy {
 
   spawn() {
     //appears on screen
-  }
+    enemyDiv = document.createElement("enemyDiv");
+    enemyDiv.classList.add("enemyCss");
+    enemyDiv.setAttribute("id", this.id);
 
-  getsCreatedInHtml() {
-    //like in enemyFactory()
-  }
+    enemyDiv.style.top = `${this.top}px`;
+    enemyDiv.style.left = `${this.left}px`;
 
-  doodleAttack() {
-    //by touching champion
+    let ul = document.createElement("ul");
+    ul.setAttribute("class", "signs");
+
+    this.signs.forEach((element) => {
+      let li = document.createElement("li");
+      li.innerHTML = element;
+
+      ul.appendChild(li);
+    });
+
+    enemyDiv.appendChild(ul);
+
+    main.appendChild(enemyDiv);
+
+    setTimeout((element) => {
+      this.moves();
+    }, 0);
+
+    enemiesArray.push(this);
+  } //end of spawn()
+
+  moves() {
+    //by touching champion aka MOVES towards it
+
+    let enemy = document.getElementById(this.id);
+    setTimeout(() => {
+      enemy.classList.add("enemyMoves");
+    }, 1000);
+
+    setTimeout(() => {
+      console.log(enemy.style.top);
+      enemy.remove();
+    }, 5000);
+  } //end of moves()
+
+  attack() {
+    let enemy = document.getElementById(this.id);
+    if (enemy.style.top === "274px") {
+      doodleChampion.hearts = doodleChampion.hearts - 1;
+      lifeMeter.innerHTML = doodleChampion.hearts;
+    }
   }
 } //end of class
 
-//===================== INSTANTIATING VERTICAL ENEMY ===============
+Object.defineProperty(Element.prototype, "documentOffsetTop", {
+  get: function () {
+    return (
+      this.offsetTop +
+      (this.offsetParent ? this.offsetParent.documentOffsetTop : 0)
+    );
+  },
+});
 
-const verticalEnemy = new Enemy("single", "|", "verticalEnemy", 0, 0);
+Object.defineProperty(Element.prototype, "documentOffsetLeft", {
+  get: function () {
+    return (
+      this.offsetLeft +
+      (this.offsetParent ? this.offsetParent.documentOffsetLeft : 0)
+    );
+  },
+});
 
-//================ CHAMPION CLASS ========================================================
+// let x = bad.documentOffsetLeft;
+
+// console.log(x);
+
+//===================== INSTANTIATING VERTICAL ENEMY ====================================
+
+const verticalEnemy = new Enemy("single", ["|"], "verticalEnemy", 36, 0);
+// enemiesArray.push(verticalEnemy);
+
+//===================== INSTANTIATING HORIZONTAL ENEMY ====================================
+
+const horizontalEnemy = new Enemy("single", ["-"], "horizontalEnemy", 36, 869);
+// enemiesArray.push(horizontalEnemy);
+
+//===================== INSTANTIATING DOWN ARROW ENEMY ====================================
+
+const upArrowEnemy = new Enemy("single", ["^"], "upArrowEnemy", 487, 0);
+// enemiesArray.push(upArrowEnemy);
+
+//===================== INSTANTIATING UP ARROW ENEMY ====================================
+
+const downArrowEnemy = new Enemy("single", ["v"], "downArrowEnemy", 485, 869);
+// enemiesArray.push(downArrowEnemy);
+//================================== CHAMPION CLASS ======================================
 
 class Champion {
   constructor(name) {
@@ -61,25 +144,97 @@ class Champion {
   } //end of constructor
 
   attack() {
-    if (verticalArray.find((element) => element === label)) {
-      console.log("You vertically attacked the enemy");
-      //verticalEnemy shall disappear
-    } else if (horizontalArray.find((element) => element === label)) {
-      console.log("You horizontally attacked the enemy");
-      //horizontalEnemy shall disappear
-    } else if (upArrowArray.find((element) => element === label)) {
-      console.log("You upArrow attacked the enemy");
-      //upArrowEnemy shall disappear
-    } else if (downArrowArray.find((element) => element === label)) {
-      console.log("You downArrow attacked the enemy");
-      //downArrowEnemy shall disappear
+    console.log(enemiesArray);
+
+    const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
+    const horizontalArray = ["-", "_"];
+    const upArrowArray = ["^", "n", "A", "~"];
+    const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
+    //===========
+    if (verticalArray.find((element) => element === userAttack)) {
+      console.log("Looks like a vertical attack");
+      enemiesArray.forEach((enemy) => {
+        if (enemy.isDead === false) {
+          verticalArray.find((element) => {
+            if (enemy.signs[0] === element) {
+              let grab = document.querySelector(`#${enemy.id}`);
+              grab.remove();
+              enemy.isDead = true;
+            }
+          });
+        }
+      });
+
+      //============
+    } else if (horizontalArray.find((element) => element === userAttack)) {
+      console.log("Looks like a Horizontal attack");
+      enemiesArray.forEach((enemy) => {
+        if (enemy.isDead === false) {
+          horizontalArray.find((element) => {
+            if (enemy.signs[0] === element) {
+              let grab = document.querySelector(`#${enemy.id}`);
+              grab.remove();
+              enemy.isDead = true;
+            }
+          });
+        }
+      });
+
+      //===========
+    } else if (upArrowArray.find((element) => element === userAttack)) {
+      console.log("Looks like an upArrow attack");
+      enemiesArray.forEach((enemy) => {
+        if (enemy.isDead === false) {
+          upArrowArray.find((element) => {
+            if (enemy.signs[0] === element) {
+              let grab = document.querySelector(`#${enemy.id}`);
+              grab.remove();
+              enemy.isDead = true;
+            }
+          });
+        }
+      });
+
+      //=========
+    } else if (downArrowArray.find((element) => element === userAttack)) {
+      console.log("Looks like a downArrow attack");
+      enemiesArray.forEach((enemy) => {
+        if (enemy.isDead === false) {
+          downArrowArray.find((element) => {
+            if (enemy.signs[0] === element) {
+              let grab = document.querySelector(`#${enemy.id}`);
+              grab.remove();
+              enemy.isDead = true;
+            }
+          });
+        }
+      });
     }
   } //end of a method
 } //end of class
 
-//================== INSTANTIATING OUR CHAMPION ========================
+//================== INSTANTIATING OUR CHAMPION ==========================================
 
-const doodleMaster = new Champion("champion");
+const doodleChampion = new Champion("champion");
+lifeMeter.innerHTML = doodleChampion.hearts;
+
+//=================================== START BUTTON ======================================
+
+setTimeout(() => {
+  verticalEnemy.spawn();
+}, 1000);
+
+setTimeout(() => {
+  horizontalEnemy.spawn();
+}, 2000);
+
+setTimeout(() => {
+  upArrowEnemy.spawn();
+}, 3000);
+
+setTimeout(() => {
+  downArrowEnemy.spawn();
+}, 4000);
 
 /*============================== EDITOR (DRAWING PAD) =======================================
 
@@ -98,10 +253,8 @@ editorElement.addEventListener("exported", (event) => {
 
   if (apiResults.label !== "") {
     //the code belowe will only happen if our label is returned NOT EMPTY:
-    console.log(apiResults);
 
-    label = apiResults.label;
-    console.log(label);
+    userAttack = apiResults.label; //capturing API's BEST GUESS
 
     //I want each stroke to be analized individually, otherwise itll combine them and try to read them as ONE:
 
@@ -109,11 +262,12 @@ editorElement.addEventListener("exported", (event) => {
 
     editorElement.editor.clear();
 
-    doodleMaster.attack();
+    //This is where the attack happens:
+    doodleChampion.attack();
   }
 }); //end of exported event listener
 
-//==========================================
+//=======================================================================================
 //API SETUP (required by API docs)
 
 const configuration = {
@@ -152,3 +306,5 @@ const pencilTheme = {
 };
 
 iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad/API object
+
+//=======================================================================================
