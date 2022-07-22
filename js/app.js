@@ -75,7 +75,7 @@ class Enemy {
 
   createHtml() {
     //appears on screen
-    enemyDiv = document.createElement("enemyDiv");
+    enemyDiv = document.createElement("div");
     enemyDiv.classList.add("enemyCss");
     enemyDiv.setAttribute("id", this.id);
 
@@ -111,27 +111,24 @@ class Enemy {
 
   die() {
     this.isDead = true;
-    let enemyHtml = document.getElementById(this.id);
-    enemyHtml.setAttribute("class", "poof"); //this will overwrite any previous classes
+    let baddieDiv = document.getElementById(this.id);
+
+    let x = baddieDiv.documentOffsetTop;
+    let y = baddieDiv.documentOffsetLeft;
+
+    baddieDiv.style.top = x;
+    baddieDiv.style.left = y;
+
+    console.log(this.id);
+    baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
 
     setTimeout(() => {
-      enemyHtml.remove(); //removing enemy's HTML
+      baddieDiv.remove(); //removing enemy's HTML
+      enemiesArray = enemiesArray.filter((element) => element.isDead !== true);
     }, 600);
+
+    console.log(enemiesArray);
   }
-
-  moves() {
-    //by touching champion aka MOVES towards it
-
-    let enemy = document.getElementById(this.id);
-    setTimeout(() => {
-      enemy.classList.add("enemyMoves");
-    }, 1000);
-
-    setTimeout(() => {
-      this.attack();
-      enemy.remove();
-    }, 5000);
-  } //end of moves()
 
   attack() {
     let enemy = document.getElementById(this.id);
@@ -196,83 +193,99 @@ class Champion {
     const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
     const circleArray = ["O", "①", "⊖", "@", "0", "o", "◦"];
 
-    //===========
+    //=========== CHECKING IF USER ATTACK MATCHES VERTICAL ELEMENTS IN ARRAY
     if (verticalArray.find((element) => element === userAttack)) {
       console.log("Looks like a vertical attack");
+
+      //Now that we know its a vertical attack, we check which enemies have the letter "l" and get hurt:
       enemiesArray.forEach((enemy) => {
-        verticalArray.find((element) => {
-          if (enemy.symbols[0] === element) {
-            enemy.symbols.shift(); //removed first symbol from enemy(object)'s array of symbols
-            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
-            grab.remove();
-            this.score += 100;
-            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+        if (enemy.symbols[0] === "l") {
+          enemy.symbols.shift(); //removed first symbol from enemy(object)'s array
+          let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          li.remove();
 
-            if (enemy.symbols.length === 0) {
-              enemy.die();
-            }
+          this.score += 100;
+          scoreBoard.innerHTML = `SCORE: ${this.score}`;
 
-            //Use .filter to remove them from the array
+          if (enemy.symbols.length === 0) {
+            enemy.die();
           }
-        });
+        }
       });
 
       //============
     } else if (horizontalArray.find((element) => element === userAttack)) {
       console.log("Looks like a Horizontal attack");
+
       enemiesArray.forEach((enemy) => {
-        horizontalArray.find((element) => {
-          if (enemy.symbols[0] === element) {
-            enemy.symbols.shift();
-            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
-            grab.remove();
-            this.score += 100;
-            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+        if (enemy.symbols[0] === "_") {
+          enemy.symbols.shift();
+          let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          li.remove();
+
+          this.score += 100;
+          scoreBoard.innerHTML = `SCORE: ${this.score}`;
+
+          if (enemy.symbols.length === 0) {
+            enemy.die();
           }
-        });
+        }
       });
 
       //===========
     } else if (upArrowArray.find((element) => element === userAttack)) {
       console.log("Looks like an upArrow attack");
+
       enemiesArray.forEach((enemy) => {
-        upArrowArray.find((element) => {
-          if (enemy.symbols[0] === element) {
-            enemy.symbols.shift();
-            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
-            grab.remove();
-            this.score += 100;
-            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+        if (enemy.symbols[0] === "n") {
+          enemy.symbols.shift();
+          let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          li.remove();
+
+          this.score += 100;
+          scoreBoard.innerHTML = `SCORE: ${this.score}`;
+
+          if (enemy.symbols.length === 0) {
+            enemy.die();
           }
-        });
+        }
       });
 
       //=========
     } else if (downArrowArray.find((element) => element === userAttack)) {
       console.log("Looks like a downArrow attack");
+
       enemiesArray.forEach((enemy) => {
-        downArrowArray.find((element) => {
-          if (enemy.symbols[0] === element) {
-            enemy.symbols.shift();
-            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
-            grab.remove();
-            this.score += 100;
-            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+        if (enemy.symbols[0] === "v") {
+          enemy.symbols.shift();
+          let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          li.remove();
+
+          this.score += 100;
+          scoreBoard.innerHTML = `SCORE: ${this.score}`;
+
+          if (enemy.symbols.length === 0) {
+            enemy.die();
           }
-        });
+        }
       });
+
+      //===================
     } else if (circleArray.find((element) => element === userAttack)) {
       console.log("Looks like a circle attack");
       enemiesArray.forEach((enemy) => {
-        circleArray.find((element) => {
-          if (enemy.symbols[0] === element) {
-            enemy.symbols.shift();
-            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
-            grab.remove();
-            this.score += 100;
-            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+        if (enemy.symbols[0] === "O") {
+          enemy.symbols.shift();
+          let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          li.remove();
+
+          this.score += 100;
+          scoreBoard.innerHTML = `SCORE: ${this.score}`;
+
+          if (enemy.symbols.length === 0) {
+            enemy.die();
           }
-        });
+        }
       });
     }
 
@@ -281,8 +294,6 @@ class Champion {
       gameOver.innerHTML = "LEVEL CLEARED";
     }
   } //end of a method
-
-  spawn() {} //end of spawn() method
 } //end of class
 
 //================== INSTANTIATING OUR CHAMPION ==========================================

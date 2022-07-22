@@ -148,6 +148,7 @@ main {
   background-repeat: no-repeat;
   width: 244px;
   height: 229px;
+  position: absolute;
 }
 
 .symbols {
