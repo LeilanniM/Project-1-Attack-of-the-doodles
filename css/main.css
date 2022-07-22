@@ -114,7 +114,7 @@ main {
 }
 
 .enemyMoves {
-  animation: slides 4s linear;
+  animation: slides 7s linear;
 }
 
 @keyframes slides {
@@ -140,6 +140,14 @@ main {
   100% {
     opacity: 1;
   }
+}
+
+.poof {
+  background: URL("../images/smoke.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 244px;
+  height: 229px;
 }
 
 .symbols {
@@ -186,7 +194,8 @@ main {
 
 .n {
   background: URL("../images/uparrow.png");
-  height: 31px;
+  height: 100%;
+  width: 31px;
 }
 /* =========================== OVERLAY FOR GAME OVER =========================== */
 

@@ -43,11 +43,11 @@ const startButton = document.querySelector("#start");
 //===================================== ENEMIES ARRAYS =====================================
 
 const wave1 = [
-  { symbols: ["l"], id: 1, top: 68, left: 350 },
+  { symbols: ["l"], id: 1, top: -20, left: 140 },
   { symbols: ["v"], id: 2, top: 68, left: 10 },
-  { symbols: ["_"], id: 3, top: 10, left: 200 },
-  { symbols: ["n"], id: 4, top: 10, left: 200 },
-  { symbols: ["O"], id: 5, top: 10, left: 200 },
+  { symbols: ["_"], id: 3, top: 230, left: 778 },
+  { symbols: ["n"], id: 4, top: 455, left: 495 },
+  { symbols: ["O"], id: 5, top: -28, left: 793 },
 ];
 const wave2 = [
   { symbols: ["l", "v", "_"], id: 6, top: 68, left: 350 },
@@ -109,6 +109,16 @@ class Enemy {
     }, millSeconds);
   }
 
+  die() {
+    this.isDead = true;
+    let enemyHtml = document.getElementById(this.id);
+    enemyHtml.setAttribute("class", "poof"); //this will overwrite any previous classes
+
+    setTimeout(() => {
+      enemyHtml.remove(); //removing enemy's HTML
+    }, 600);
+  }
+
   moves() {
     //by touching champion aka MOVES towards it
 
@@ -163,7 +173,7 @@ function generateBaddies(currentWave) {
 function displayBaddies() {
   enemiesArray.forEach((element) => {
     let enemyHtml = element.createHtml();
-    element.appearOnScreen(ß);
+    element.appearOnScreen(enemyHtml);
   });
 }
 
@@ -184,79 +194,89 @@ class Champion {
     const horizontalArray = ["-", "_"];
     const upArrowArray = ["^", "n", "A", "~"];
     const downArrowArray = ["v", "V", "✓", "u", "U", "w", "W"];
+    const circleArray = ["O", "①", "⊖", "@", "0", "o", "◦"];
+
     //===========
     if (verticalArray.find((element) => element === userAttack)) {
       console.log("Looks like a vertical attack");
       enemiesArray.forEach((enemy) => {
-        if (enemy.isDead === false) {
-          verticalArray.find((element) => {
-            if (enemy.symbols[0] === element) {
-              let grab = document.querySelector(`#${enemy.id}`);
-              grab.remove();
-              this.score += 100;
-              scoreBoard.innerHTML = `SCORE: ${this.score}`;
-              enemy.isDead = true;
+        verticalArray.find((element) => {
+          if (enemy.symbols[0] === element) {
+            enemy.symbols.shift(); //removed first symbol from enemy(object)'s array of symbols
+            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
+            grab.remove();
+            this.score += 100;
+            scoreBoard.innerHTML = `SCORE: ${this.score}`;
 
-              //Use .filter to remove them from the array
+            if (enemy.symbols.length === 0) {
+              enemy.die();
             }
-          });
-        }
+
+            //Use .filter to remove them from the array
+          }
+        });
       });
 
       //============
     } else if (horizontalArray.find((element) => element === userAttack)) {
       console.log("Looks like a Horizontal attack");
       enemiesArray.forEach((enemy) => {
-        if (enemy.isDead === false) {
-          horizontalArray.find((element) => {
-            if (enemy.symbols[0] === element) {
-              let grab = document.querySelector(`#${enemy.id}`);
-              grab.remove();
-              this.score += 100;
-              scoreBoard.innerHTML = `SCORE: ${this.score}`;
-
-              enemy.isDead = true;
-            }
-          });
-        }
+        horizontalArray.find((element) => {
+          if (enemy.symbols[0] === element) {
+            enemy.symbols.shift();
+            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
+            grab.remove();
+            this.score += 100;
+            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+          }
+        });
       });
 
       //===========
     } else if (upArrowArray.find((element) => element === userAttack)) {
       console.log("Looks like an upArrow attack");
       enemiesArray.forEach((enemy) => {
-        if (enemy.isDead === false) {
-          upArrowArray.find((element) => {
-            if (enemy.symbols[0] === element) {
-              let grab = document.querySelector(`#${enemy.id}`);
-              grab.remove();
-              this.score += 100;
-              scoreBoard.innerHTML = `SCORE: ${this.score}`;
-              enemy.isDead = true;
-            }
-          });
-        }
+        upArrowArray.find((element) => {
+          if (enemy.symbols[0] === element) {
+            enemy.symbols.shift();
+            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
+            grab.remove();
+            this.score += 100;
+            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+          }
+        });
       });
 
       //=========
     } else if (downArrowArray.find((element) => element === userAttack)) {
       console.log("Looks like a downArrow attack");
       enemiesArray.forEach((enemy) => {
-        if (enemy.isDead === false) {
-          downArrowArray.find((element) => {
-            if (enemy.symbols[0] === element) {
-              let grab = document.querySelector(`#${enemy.id}`);
-              grab.remove();
-              this.score += 100;
-              scoreBoard.innerHTML = `SCORE: ${this.score}`;
-              enemy.isDead = true;
-            }
-          });
-        }
+        downArrowArray.find((element) => {
+          if (enemy.symbols[0] === element) {
+            enemy.symbols.shift();
+            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
+            grab.remove();
+            this.score += 100;
+            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+          }
+        });
+      });
+    } else if (circleArray.find((element) => element === userAttack)) {
+      console.log("Looks like a circle attack");
+      enemiesArray.forEach((enemy) => {
+        circleArray.find((element) => {
+          if (enemy.symbols[0] === element) {
+            enemy.symbols.shift();
+            let grab = document.querySelector(`#${enemy.id} .symbols > li`); //targeting first child of symbols who is a child of #enemy.id
+            grab.remove();
+            this.score += 100;
+            scoreBoard.innerHTML = `SCORE: ${this.score}`;
+          }
+        });
       });
     }
 
-    if (this.score === 400) {
+    if (this.score === 500) {
       gameOver.classList.add("overlay");
       gameOver.innerHTML = "LEVEL CLEARED";
     }
