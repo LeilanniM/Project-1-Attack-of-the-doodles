@@ -126,7 +126,7 @@ main {
   }
 }
 
-/*==============================*/
+/*============*/
 
 .appear {
   animation: baddieAppears 1s linear;
@@ -142,6 +142,52 @@ main {
   }
 }
 
+.symbols {
+  display: flex;
+  padding: 0;
+  height: 46px;
+  margin-top: 25px;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+}
+
+.symbols li {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.l {
+  background: URL("../images/vert.png");
+  height: 100%;
+  width: 23px;
+}
+
+.v {
+  background: URL("../images/downarrow.png");
+  height: 100%;
+  width: 31px;
+}
+
+._ {
+  background: URL("../images/hori.png");
+  height: 100%;
+  width: 33px;
+}
+
+.O {
+  background: URL("../images/circle.png");
+  height: 100%;
+  width: 40px;
+}
+
+.n {
+  background: URL("../images/uparrow.png");
+  height: 31px;
+}
 /* =========================== OVERLAY FOR GAME OVER =========================== */
 
 .overlay {
