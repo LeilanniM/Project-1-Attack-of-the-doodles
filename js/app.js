@@ -1,11 +1,3 @@
-//============ Reference for understanding apiResults path ========================================
-// words = [
-//   {
-//     label: "l",
-//     candidates: ["l", "I", "1", "/", "i"],
-//   },
-// ];
-
 //=================================== FORMULA FOR TRACKING OFFSETS ===================================
 
 Object.defineProperty(Element.prototype, "documentOffsetTop", {
@@ -31,7 +23,6 @@ Object.defineProperty(Element.prototype, "documentOffsetLeft", {
 // console.log(x);
 
 //================================ Global access: ====================================================
-let candidates;
 let apiResults;
 let userAttack; //it is the API's bestGuess
 let enemyDiv;
@@ -46,24 +37,43 @@ const lifeMeter = document.querySelector("#lifeMeter"); //temporary
 
 const main = document.querySelector("main");
 
-const gameOver = document.querySelector(".gameOver");
-//===================================== ENEMIES ARRAY =====================================
+const gameOver = document.querySelector(".gameOver"); //but also tells us when the ux wins
+const startButton = document.querySelector("#start");
+
+//===================================== ENEMIES ARRAYS =====================================
+
+const wave1 = [
+  { symbols: ["l"], id: 1, top: 68, left: 350 },
+  { symbols: ["v"], id: 2, top: 68, left: 10 },
+  { symbols: ["_"], id: 3, top: 10, left: 200 },
+  { symbols: ["n"], id: 4, top: 10, left: 200 },
+  { symbols: ["O"], id: 5, top: 10, left: 200 },
+];
+const wave2 = [
+  { symbols: ["l", "v", "_"], id: 6, top: 68, left: 350 },
+  { symbols: ["l", "O", "v"], id: 7, top: 68, left: 10 },
+  { symbols: ["n", "v", "O"], id: 8, top: 10, left: 200 },
+  { symbols: ["O", "n", "_"], id: 9, top: 68, left: 350 },
+  { symbols: ["_", "O", "l"], id: 10, top: 68, left: 350 },
+  { symbols: ["v", "v", "O"], id: 11, top: 68, left: 350 },
+];
 
 let enemiesArray = [];
+
+let currentWave = wave1;
 
 //=================== ENEMY CLASS ========================================================
 
 class Enemy {
-  constructor(type, signs, id, top, left) {
-    this.type = type; //Single sign OR Combo signs
-    this.signs = signs; //array
-    this.id = id; //not sure if necessary
+  constructor(symbols, id, top, left) {
+    this.symbols = symbols; //array
+    this.id = `baddie-${id}`;
     this.top = top;
     this.left = left;
     this.isDead = false;
   }
 
-  spawn() {
+  createHtml() {
     //appears on screen
     enemyDiv = document.createElement("enemyDiv");
     enemyDiv.classList.add("enemyCss");
@@ -73,25 +83,31 @@ class Enemy {
     enemyDiv.style.left = `${this.left}px`;
 
     let ul = document.createElement("ul");
-    ul.setAttribute("class", "signs");
+    ul.setAttribute("class", "symbols");
 
-    this.signs.forEach((element) => {
+    this.symbols.forEach((element) => {
       let li = document.createElement("li");
-      li.innerHTML = element;
+      li.setAttribute("class", element);
 
       ul.appendChild(li);
     });
 
     enemyDiv.appendChild(ul);
 
-    main.appendChild(enemyDiv);
-
-    setTimeout((element) => {
-      this.moves();
-    }, 0);
-
-    enemiesArray.push(this);
+    return enemyDiv;
   } //end of spawn()
+
+  appearOnScreen(enemyHtml, millSeconds = 0) {
+    setTimeout(() => {
+      enemyHtml.classList.toggle("appear");
+      main.appendChild(enemyHtml);
+
+      setTimeout(() => {
+        enemyHtml.classList.toggle("appear");
+        enemyHtml.classList.toggle("enemyMoves");
+      }, 1000);
+    }, millSeconds);
+  }
 
   moves() {
     //by touching champion aka MOVES towards it
@@ -128,25 +144,29 @@ class Enemy {
   } //end of attack()
 } //end of class
 
-//===================== INSTANTIATING VERTICAL ENEMY ====================================
+//=================== GENERATE BADDIES FUNCTION ==========================================
 
-const verticalEnemy = new Enemy("single", ["|"], "verticalEnemy", 36, 0);
-// enemiesArray.push(verticalEnemy);
+function generateBaddies(currentWave) {
+  currentWave.forEach((element) => {
+    enemiesArray.push(
+      new Enemy(element.symbols, element.id, element.top, element.left)
+    );
+  });
 
-//===================== INSTANTIATING HORIZONTAL ENEMY ====================================
+  console.log(enemiesArray);
 
-const horizontalEnemy = new Enemy("single", ["-"], "horizontalEnemy", 36, 869);
-// enemiesArray.push(horizontalEnemy);
+  displayBaddies();
+} //end of generateBaddies()
 
-//===================== INSTANTIATING DOWN ARROW ENEMY ====================================
+//======================= GENERATE BADDIE'S HTML ======================================
 
-const upArrowEnemy = new Enemy("single", ["^"], "upArrowEnemy", 487, 0);
-// enemiesArray.push(upArrowEnemy);
+function displayBaddies() {
+  enemiesArray.forEach((element) => {
+    let enemyHtml = element.createHtml();
+    element.appearOnScreen(ß);
+  });
+}
 
-//===================== INSTANTIATING UP ARROW ENEMY ====================================
-
-const downArrowEnemy = new Enemy("single", ["v"], "downArrowEnemy", 485, 869);
-// enemiesArray.push(downArrowEnemy);
 //================================== CHAMPION CLASS ======================================
 
 class Champion {
@@ -170,7 +190,7 @@ class Champion {
       enemiesArray.forEach((enemy) => {
         if (enemy.isDead === false) {
           verticalArray.find((element) => {
-            if (enemy.signs[0] === element) {
+            if (enemy.symbols[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
@@ -189,7 +209,7 @@ class Champion {
       enemiesArray.forEach((enemy) => {
         if (enemy.isDead === false) {
           horizontalArray.find((element) => {
-            if (enemy.signs[0] === element) {
+            if (enemy.symbols[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
@@ -207,7 +227,7 @@ class Champion {
       enemiesArray.forEach((enemy) => {
         if (enemy.isDead === false) {
           upArrowArray.find((element) => {
-            if (enemy.signs[0] === element) {
+            if (enemy.symbols[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
@@ -224,7 +244,7 @@ class Champion {
       enemiesArray.forEach((enemy) => {
         if (enemy.isDead === false) {
           downArrowArray.find((element) => {
-            if (enemy.signs[0] === element) {
+            if (enemy.symbols[0] === element) {
               let grab = document.querySelector(`#${enemy.id}`);
               grab.remove();
               this.score += 100;
@@ -252,21 +272,11 @@ lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
 
 //=================================== START BUTTON ======================================
 
-setTimeout(() => {
-  verticalEnemy.spawn();
-}, 1000);
+function startGame() {
+  startButton.remove();
 
-setTimeout(() => {
-  horizontalEnemy.spawn();
-}, 2000);
-
-setTimeout(() => {
-  upArrowEnemy.spawn();
-}, 3000);
-
-setTimeout(() => {
-  downArrowEnemy.spawn();
-}, 4000);
+  generateBaddies(wave1);
+}
 
 /*============================== EDITOR (DRAWING PAD) =======================================
 
@@ -340,3 +350,5 @@ const pencilTheme = {
 iink.register(editorElement, configuration, null, pencilTheme); //instantiating our drawing pad/API object
 
 //=======================================================================================
+
+//=======================================================

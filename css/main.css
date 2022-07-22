@@ -71,7 +71,9 @@ body {
 main {
   background-color: white;
   background-image: URL("../images/aesthetic-anime-04.jpeg");
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+
   border: solid 18px rgb(128, 128, 128);
   border-radius: 10px;
   width: 1000px;
@@ -103,14 +105,12 @@ main {
 /*====================================== ENEMIES =========================================*/
 
 .enemyCss {
-  border: solid black 2px;
-  width: 130px;
-  height: 172px;
-  background-color: red;
   position: absolute;
-  text-align: center;
-  padding-top: 15px;
-  font-size: 20px;
+  width: 235px;
+  height: 229px;
+  background: url(../images/monophy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .enemyMoves {
@@ -126,36 +126,21 @@ main {
   }
 }
 
-/*=======================================================================================*/
+/*==============================*/
 
-.signs {
-  position: absolute;
-  top: -53px;
-  left: -4px;
-  font-size: 20px;
-  list-style: none;
+.appear {
+  animation: baddieAppears 1s linear;
 }
 
-li {
-  display: inline-block;
+@keyframes baddieAppears {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
-
-/* ========================= Footer & inside of Footer ================================ */
-
-footer {
-  /* border: solid 4px rgb(137, 134, 134); */
-  border-radius: 12px;
-  height: 70px;
-  width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  /* background-color: white; */
-  background-size: cover;
-  /* background-image: URL("../images/yellownotepad.webp"); */
-}
-
-/* Inside of footer: */
 
 /* =========================== OVERLAY FOR GAME OVER =========================== */
 
@@ -175,4 +160,17 @@ footer {
   font-size: 100px;
   font-family: "Modak", cursive;
   color: #6b5656;
+}
+
+/* ==================== START BUTTON ==================== */
+
+#start {
+  position: absolute;
+  height: 54px;
+  width: 158px;
+  top: 480px;
+  left: 452px;
+  border-radius: 15px;
+  font-size: 40px;
+  z-index: 100; /*to bring it to the front of the z index (screen)(layer) */
 }
