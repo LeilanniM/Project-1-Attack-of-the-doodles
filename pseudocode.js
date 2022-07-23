@@ -1,4 +1,13 @@
 /* 
+-Instructions
+-Get rid of pause button 
+-adjust the hearts of champion
+-README FILE
+
+
+
+
+================
 
 Q: I want the START button to start the game, therefor the champion to spawn after START is pressed and right after that the enemies will spawn.
 

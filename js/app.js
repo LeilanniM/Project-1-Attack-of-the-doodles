@@ -167,39 +167,32 @@ class Enemy {
   }
 
   die() {
+    const currentBaddie = this.type;
+
     this.isDead = true;
     let baddieDiv = document.getElementById(this.id);
 
     let myMain = document.getElementById("myMain");
     let mainCoordinates = myMain.getBoundingClientRect();
     let enemyEndingCoordinates = baddieDiv.getBoundingClientRect();
-    // console.log(this);
-    // console.log(enemyEndingCoordinates);
-    // console.log(mainCoordinates);
-    // this.getPosition();
+
     let x = Math.abs(enemyEndingCoordinates.left - (mainCoordinates.left + 18));
     let y = Math.abs(enemyEndingCoordinates.top - (mainCoordinates.top + 18));
-
-    // console.log(this.id);
 
     baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
     baddieDiv.style.top = `${y}px`;
     baddieDiv.style.left = `${x}px`;
 
-    // baddieDiv.classList.toggle("enemyCss");
-
     setTimeout(() => {
       baddieDiv.remove(); //removing enemy's HTML
       enemiesArray = enemiesArray.filter((element) => element.id !== this.id); //removing enemy from array by assigning enemiesArray a new value
-
-      console.log(enemiesArray);
-
-      if (!(allWaves.indexOf(currentWave) === allWaves.length - 1)) {
+      if (currentBaddie === "bossBaddie3") {
+        gameOver.classList.add("overlay");
+        gameOver.innerHTML = `LEVEL CLEARED, SCORE: ${doodleChampion.score}`;
+      } else if (!(allWaves.indexOf(currentWave) === allWaves.length - 1)) {
         this.respawn();
       }
     }, 600);
-
-    // console.log(enemiesArray);
   }
 
   respawn() {
@@ -271,15 +264,6 @@ function generateBaddies(currentWave) {
   });
   // displayBaddies();
 } //end of generateBaddies()
-
-//======================= GENERATE BADDIE'S HTML ======================================
-
-// function displayBaddies() {
-//   enemiesArray.forEach((element) => {
-//     let enemyHtml = element.createHtml();
-//     element.appearOnScreen(enemyHtml);
-//   });
-// }
 
 //================================== CHAMPION CLASS ======================================
 
