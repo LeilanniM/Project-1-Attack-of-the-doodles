@@ -19,21 +19,21 @@ const startButton = document.querySelector("#start");
 
 const allWaves = [
   [
-    { symbols: ["l"], id: 1, top: -20, left: 140 },
-    { symbols: ["v"], id: 2, top: 68, left: 10 },
-    { symbols: ["_"], id: 3, top: 230, left: 778 },
-    { symbols: ["n"], id: 4, top: 455, left: 495 },
-    { symbols: ["O"], id: 5, top: -28, left: 793 },
+    { symbols: ["_"], id: 1, top: -20, left: 140, delay: 1 },
+    { symbols: ["l"], id: 2, top: 68, left: 10, delay: 2 },
+    { symbols: ["_"], id: 3, top: 230, left: 778, delay: 3 },
+    // { symbols: ["n"], id: 4, top: 455, left: 495, delay: 1 },
+    // { symbols: ["O"], id: 5, top: -28, left: 793, delay: 1 },
   ],
   [
-    { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801 },
-    { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640 },
-    { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39 },
+    { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801, delay: 1 },
+    { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640, delay: 1 },
+    { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39, delay: 1 },
   ],
   [
-    { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37 },
-    { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8 },
-    { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639 },
+    { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37, delay: 1 },
+    { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8, delay: 1 },
+    { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639, delay: 1 },
   ],
 ];
 
@@ -44,12 +44,13 @@ let currentWave = allWaves[0];
 //=================== ENEMY CLASS ========================================================
 
 class Enemy {
-  constructor(symbols, id, top, left) {
+  constructor(symbols, id, top, left, delay) {
     this.symbols = symbols; //array
     this.id = `baddie-${id}`;
     this.top = top;
     this.left = left;
     this.isDead = false;
+    this.delay = delay;
   }
 
   createHtml() {
@@ -77,7 +78,7 @@ class Enemy {
     return enemyDiv;
   } //end of createHtml()
 
-  appearOnScreen(enemyHtml, millSeconds = 0) {
+  appearOnScreen(enemyHtml) {
     setTimeout(() => {
       enemyHtml.classList.toggle("appear");
       main.appendChild(enemyHtml);
@@ -90,11 +91,11 @@ class Enemy {
         enemyHtml.classList.toggle("appear");
         enemyHtml.classList.toggle("enemyMoves"); //starts moving and lasts 7 secs
 
-        setTimeout(() => {
-          this.attack();
-        }, 6000);
+        // setTimeout(() => {
+        //   this.attack();
+        // }, 6000);
       }, 1000);
-    }, millSeconds);
+    }, 0);
   }
 
   die() {
@@ -179,24 +180,32 @@ class Enemy {
 
 function generateBaddies(currentWave) {
   currentWave.forEach((element) => {
-    enemiesArray.push(
-      new Enemy(element.symbols, element.id, element.top, element.left)
+    let baddie = new Enemy(
+      element.symbols,
+      element.id,
+      element.top,
+      element.left,
+      element.delay
     );
+
+    setTimeout(() => {
+      enemiesArray.push(baddie);
+
+      let enemyHtml = baddie.createHtml();
+      baddie.appearOnScreen(enemyHtml);
+    }, baddie.delay * 1000); ///////////////////
   });
-
-  // console.log(enemiesArray);
-
-  displayBaddies();
+  // displayBaddies();
 } //end of generateBaddies()
 
 //======================= GENERATE BADDIE'S HTML ======================================
 
-function displayBaddies() {
-  enemiesArray.forEach((element) => {
-    let enemyHtml = element.createHtml();
-    element.appearOnScreen(enemyHtml);
-  });
-}
+// function displayBaddies() {
+//   enemiesArray.forEach((element) => {
+//     let enemyHtml = element.createHtml();
+//     element.appearOnScreen(enemyHtml);
+//   });
+// }
 
 //================================== CHAMPION CLASS ======================================
 
@@ -246,6 +255,7 @@ class Champion {
         if (enemy.symbols[0] === "_") {
           enemy.symbols.shift();
           let li = document.querySelector(`#${enemy.id} .symbols > li`);
+          console.log(enemy);
           li.remove();
 
           this.score += 100;
