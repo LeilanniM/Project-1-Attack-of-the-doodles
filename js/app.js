@@ -1,31 +1,6 @@
-//=================================== FORMULA FOR TRACKING OFFSETS ===================================
-
-Object.defineProperty(Element.prototype, "documentOffsetTop", {
-  get: function () {
-    return (
-      this.offsetTop +
-      (this.offsetParent ? this.offsetParent.documentOffsetTop : 0)
-    );
-  },
-});
-
-Object.defineProperty(Element.prototype, "documentOffsetLeft", {
-  get: function () {
-    return (
-      this.offsetLeft +
-      (this.offsetParent ? this.offsetParent.documentOffsetLeft : 0)
-    );
-  },
-});
-
-// let x = enemy.documentOffsetLeft;
-
-// console.log(x);
-
 //================================ Global access: ====================================================
 let apiResults;
 let userAttack; //it is the API's bestGuess
-let enemyDiv;
 
 const heartArray = ["❤", "💓", "💙", "💕", "💔"];
 
@@ -42,25 +17,29 @@ const startButton = document.querySelector("#start");
 
 //===================================== ENEMIES ARRAYS =====================================
 
-const wave1 = [
-  { symbols: ["l"], id: 1, top: -20, left: 140 },
-  { symbols: ["v"], id: 2, top: 68, left: 10 },
-  { symbols: ["_"], id: 3, top: 230, left: 778 },
-  { symbols: ["n"], id: 4, top: 455, left: 495 },
-  { symbols: ["O"], id: 5, top: -28, left: 793 },
-];
-const wave2 = [
-  { symbols: ["l", "v", "_"], id: 6, top: 68, left: 350 },
-  { symbols: ["l", "O", "v"], id: 7, top: 68, left: 10 },
-  { symbols: ["n", "v", "O"], id: 8, top: 10, left: 200 },
-  { symbols: ["O", "n", "_"], id: 9, top: 68, left: 350 },
-  { symbols: ["_", "O", "l"], id: 10, top: 68, left: 350 },
-  { symbols: ["v", "v", "O"], id: 11, top: 68, left: 350 },
+const allWaves = [
+  [
+    { symbols: ["l"], id: 1, top: -20, left: 140 },
+    { symbols: ["v"], id: 2, top: 68, left: 10 },
+    { symbols: ["_"], id: 3, top: 230, left: 778 },
+    { symbols: ["n"], id: 4, top: 455, left: 495 },
+    { symbols: ["O"], id: 5, top: -28, left: 793 },
+  ],
+  [
+    { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801 },
+    { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640 },
+    { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39 },
+  ],
+  [
+    { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37 },
+    { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8 },
+    { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639 },
+  ],
 ];
 
 let enemiesArray = [];
 
-let currentWave = wave1;
+let currentWave = allWaves[0];
 
 //=================== ENEMY CLASS ========================================================
 
@@ -75,7 +54,8 @@ class Enemy {
 
   createHtml() {
     //appears on screen
-    enemyDiv = document.createElement("div");
+
+    let enemyDiv = document.createElement("div");
     enemyDiv.classList.add("enemyCss");
     enemyDiv.setAttribute("id", this.id);
 
@@ -95,16 +75,24 @@ class Enemy {
     enemyDiv.appendChild(ul);
 
     return enemyDiv;
-  } //end of spawn()
+  } //end of createHtml()
 
   appearOnScreen(enemyHtml, millSeconds = 0) {
     setTimeout(() => {
       enemyHtml.classList.toggle("appear");
       main.appendChild(enemyHtml);
 
+      let enemy = document.getElementById(this.id);
+      let enemyEndingCoordinates = enemy.getBoundingClientRect();
+      console.log(enemyEndingCoordinates);
+
       setTimeout(() => {
         enemyHtml.classList.toggle("appear");
-        enemyHtml.classList.toggle("enemyMoves");
+        enemyHtml.classList.toggle("enemyMoves"); //starts moving and lasts 7 secs
+
+        setTimeout(() => {
+          this.attack();
+        }, 6000);
       }, 1000);
     }, millSeconds);
   }
@@ -113,39 +101,75 @@ class Enemy {
     this.isDead = true;
     let baddieDiv = document.getElementById(this.id);
 
-    let x = baddieDiv.documentOffsetTop;
-    let y = baddieDiv.documentOffsetLeft;
-
-    baddieDiv.style.top = x;
-    baddieDiv.style.left = y;
+    let myMain = document.getElementById("myMain");
+    let mainCoordinates = myMain.getBoundingClientRect();
+    let enemyEndingCoordinates = baddieDiv.getBoundingClientRect();
+    console.log(this);
+    console.log(enemyEndingCoordinates);
+    console.log(mainCoordinates);
+    // this.getPosition();
+    let x = Math.abs(enemyEndingCoordinates.left - (mainCoordinates.left + 18));
+    let y = Math.abs(enemyEndingCoordinates.top - (mainCoordinates.top + 18));
 
     console.log(this.id);
     baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
+    baddieDiv.style.top = `${y}px`;
+    baddieDiv.style.left = `${x}px`;
+
+    // baddieDiv.classList.toggle("enemyCss");
 
     setTimeout(() => {
       baddieDiv.remove(); //removing enemy's HTML
-      enemiesArray = enemiesArray.filter((element) => element.isDead !== true);
+      enemiesArray = enemiesArray.filter((element) => element.isDead !== true); //removing enemy from array by assigning enemiesArray a new value
+
+      this.respawn();
     }, 600);
 
-    console.log(enemiesArray);
+    // console.log(enemiesArray);
+  }
+
+  respawn() {
+    if (enemiesArray.length === 0) {
+      currentWave = allWaves[allWaves.indexOf(currentWave) + 1];
+      console.log(currentWave);
+      console.log(allWaves.indexOf(currentWave));
+      generateBaddies(currentWave);
+    }
   }
 
   attack() {
     let enemy = document.getElementById(this.id);
-    if (enemy) {
-      let leftOffset = enemy.documentOffsetLeft;
-      // console.log(leftOffset);
-      //=======
-      if (leftOffset >= 670 || leftOffset <= 675) {
-        doodleChampion.hearts = doodleChampion.hearts - 1;
-        lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
-        //=======
-        if (doodleChampion.hearts === 0) {
-          championDiv.remove();
 
-          gameOver.classList.add("overlay");
-          gameOver.innerHTML = "GAME OVER";
-        }
+    // if enemy is still on screen (exists)
+    if (enemy) {
+      let myMain = document.getElementById("myMain");
+      let mainCoordinates = myMain.getBoundingClientRect();
+      let enemyEndingCoordinates = enemy.getBoundingClientRect();
+      console.log(this);
+      console.log(enemyEndingCoordinates);
+      console.log(mainCoordinates);
+      let x = Math.abs(enemyEndingCoordinates.left - mainCoordinates.left);
+      let y = Math.abs(enemyEndingCoordinates.top - mainCoordinates.top);
+      console.log(x);
+      console.log(y);
+      // if(enemyEndingCoordinates.left >= 438 && enemyEndingCoordinates.top >= 644){} // ASK ABOUT THIS
+
+      // enemy.classList.toggle("enemyCss");
+      // enemy.remove();
+      // enemiesArray = enemiesArray.filter((element) => element.isDead !== true);
+      // let leftOffset = enemy.documentOffsetLeft;
+      // console.log(leftOffset);
+      //==========================================================
+      // if (leftOffset >= 670 || leftOffset <= 675) {
+      doodleChampion.hearts = doodleChampion.hearts - 1;
+      lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
+      //=======
+      if (doodleChampion.hearts === 0) {
+        championDiv.remove();
+
+        gameOver.classList.add("overlay");
+        gameOver.innerHTML = "GAME OVER";
+        // }
       }
     }
   } //end of attack()
@@ -160,7 +184,7 @@ function generateBaddies(currentWave) {
     );
   });
 
-  console.log(enemiesArray);
+  // console.log(enemiesArray);
 
   displayBaddies();
 } //end of generateBaddies()
@@ -185,7 +209,7 @@ class Champion {
   } //end of constructor
 
   attack() {
-    console.log(enemiesArray);
+    // console.log(enemiesArray);
 
     const verticalArray = ["l", "I", "1", "/", "i", "\\", "|", ")", "(", "7"];
     const horizontalArray = ["-", "_"];
@@ -208,6 +232,7 @@ class Champion {
           scoreBoard.innerHTML = `SCORE: ${this.score}`;
 
           if (enemy.symbols.length === 0) {
+            // console.log(`am i dying?`);
             enemy.die();
           }
         }
@@ -289,10 +314,10 @@ class Champion {
       });
     }
 
-    if (this.score === 500) {
-      gameOver.classList.add("overlay");
-      gameOver.innerHTML = "LEVEL CLEARED";
-    }
+    // if (this.score === 500) {
+    //   gameOver.classList.add("overlay");
+    //   gameOver.innerHTML = "LEVEL CLEARED";
+    // }
   } //end of a method
 } //end of class
 
@@ -304,9 +329,21 @@ lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
 //=================================== START BUTTON ======================================
 
 function startGame() {
+  //testing growing baddie
+  document.getElementById("test").classList.add("grow");
+
   startButton.remove();
 
-  generateBaddies(wave1);
+  generateBaddies(allWaves[0]);
+}
+
+//=================================== PAUSE BUTTON =========================================
+
+function pauseAnimations() {
+  enemiesArray.forEach((element) => {
+    document.getElementById(element.id).classList.toggle("enemyMoves");
+    console.log(document.getElementById(element.id));
+  });
 }
 
 /*============================== EDITOR (DRAWING PAD) =======================================
