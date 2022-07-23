@@ -26,15 +26,43 @@ const allWaves = [
     // { symbols: ["O"], id: 5, top: -28, left: 793, delay: 1 },
   ],
   [
-    { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801, delay: 1 },
-    { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640, delay: 1 },
-    { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39, delay: 1 },
+    { symbols: ["l"], id: 4, top: -20, left: 140, delay: 0 },
+    { symbols: ["l"], id: 5, top: 68, left: 10, delay: 0 },
+    { symbols: ["_"], id: 6, top: 230, left: 778, delay: 0 },
   ],
   [
-    { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37, delay: 1 },
-    { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8, delay: 1 },
-    { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639, delay: 1 },
+    { symbols: ["_"], id: 7, top: -20, left: 140, delay: 1 },
+    { symbols: ["n"], id: 8, top: 68, left: 10, delay: 1 },
+    { symbols: ["v"], id: 9, top: 230, left: 778, delay: 1.5 },
+    { symbols: ["l"], id: 10, top: 50, left: 778, delay: 1.5 },
   ],
+  [
+    { symbols: ["l", "n", "_"], id: 11, top: -20, left: 140, delay: 1 },
+    { symbols: ["_", "l"], id: 12, top: 230, left: 778, delay: 1 },
+  ],
+
+  [
+    { symbols: ["l"], id: 13, top: -38, left: -57, delay: 1 },
+    { symbols: ["n"], id: 14, top: 127, left: -60, delay: 1 },
+    { symbols: ["_"], id: 15, top: 268, left: -52, delay: 1 },
+    { symbols: ["v"], id: 16, top: 406, left: -57, delay: 1 },
+
+    { symbols: ["l"], id: 17, top: -33, left: 785, delay: 1 },
+    { symbols: ["n"], id: 18, top: 127, left: 788, delay: 1 },
+    { symbols: ["_"], id: 19, top: 268, left: 783, delay: 1 },
+    { symbols: ["v"], id: 20, top: 424, left: 785, delay: 1 },
+  ],
+
+  // [
+  //   { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801, delay: 1 },
+  //   { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640, delay: 1 },
+  //   { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39, delay: 1 },
+  // ],
+  // [
+  //   { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37, delay: 1 },
+  //   { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8, delay: 1 },
+  //   { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639, delay: 1 },
+  // ],
 ];
 
 let enemiesArray = [];
@@ -85,7 +113,7 @@ class Enemy {
 
       let enemy = document.getElementById(this.id);
       let enemyEndingCoordinates = enemy.getBoundingClientRect();
-      console.log(enemyEndingCoordinates);
+      // console.log(enemyEndingCoordinates);
 
       setTimeout(() => {
         enemyHtml.classList.toggle("appear");
@@ -105,14 +133,14 @@ class Enemy {
     let myMain = document.getElementById("myMain");
     let mainCoordinates = myMain.getBoundingClientRect();
     let enemyEndingCoordinates = baddieDiv.getBoundingClientRect();
-    console.log(this);
-    console.log(enemyEndingCoordinates);
-    console.log(mainCoordinates);
+    // console.log(this);
+    // console.log(enemyEndingCoordinates);
+    // console.log(mainCoordinates);
     // this.getPosition();
     let x = Math.abs(enemyEndingCoordinates.left - (mainCoordinates.left + 18));
     let y = Math.abs(enemyEndingCoordinates.top - (mainCoordinates.top + 18));
 
-    console.log(this.id);
+    // console.log(this.id);
     baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
     baddieDiv.style.top = `${y}px`;
     baddieDiv.style.left = `${x}px`;
@@ -123,7 +151,11 @@ class Enemy {
       baddieDiv.remove(); //removing enemy's HTML
       enemiesArray = enemiesArray.filter((element) => element.isDead !== true); //removing enemy from array by assigning enemiesArray a new value
 
-      this.respawn();
+      console.log(enemiesArray);
+
+      if (!(allWaves.indexOf(currentWave) === allWaves.length - 1)) {
+        this.respawn();
+      }
     }, 600);
 
     // console.log(enemiesArray);
@@ -132,8 +164,8 @@ class Enemy {
   respawn() {
     if (enemiesArray.length === 0) {
       currentWave = allWaves[allWaves.indexOf(currentWave) + 1];
-      console.log(currentWave);
-      console.log(allWaves.indexOf(currentWave));
+      // console.log(currentWave);
+      // console.log(allWaves.indexOf(currentWave));
       generateBaddies(currentWave);
     }
   }
@@ -146,13 +178,13 @@ class Enemy {
       let myMain = document.getElementById("myMain");
       let mainCoordinates = myMain.getBoundingClientRect();
       let enemyEndingCoordinates = enemy.getBoundingClientRect();
-      console.log(this);
-      console.log(enemyEndingCoordinates);
-      console.log(mainCoordinates);
+      // console.log(this);
+      // console.log(enemyEndingCoordinates);
+      // console.log(mainCoordinates);
       let x = Math.abs(enemyEndingCoordinates.left - mainCoordinates.left);
       let y = Math.abs(enemyEndingCoordinates.top - mainCoordinates.top);
-      console.log(x);
-      console.log(y);
+      // console.log(x);
+      // console.log(y);
       // if(enemyEndingCoordinates.left >= 438 && enemyEndingCoordinates.top >= 644){} // ASK ABOUT THIS
 
       // enemy.classList.toggle("enemyCss");
@@ -228,7 +260,7 @@ class Champion {
 
     //=========== CHECKING IF USER ATTACK MATCHES VERTICAL ELEMENTS IN ARRAY
     if (verticalArray.find((element) => element === userAttack)) {
-      console.log("Looks like a vertical attack");
+      // console.log("Looks like a vertical attack");
 
       //Now that we know its a vertical attack, we check which enemies have the letter "l" and get hurt:
       enemiesArray.forEach((enemy) => {
@@ -249,13 +281,13 @@ class Champion {
 
       //============
     } else if (horizontalArray.find((element) => element === userAttack)) {
-      console.log("Looks like a Horizontal attack");
+      // console.log("Looks like a Horizontal attack");
 
       enemiesArray.forEach((enemy) => {
         if (enemy.symbols[0] === "_") {
           enemy.symbols.shift();
           let li = document.querySelector(`#${enemy.id} .symbols > li`);
-          console.log(enemy);
+          // console.log(enemy);
           li.remove();
 
           this.score += 100;
@@ -288,7 +320,7 @@ class Champion {
 
       //=========
     } else if (downArrowArray.find((element) => element === userAttack)) {
-      console.log("Looks like a downArrow attack");
+      // console.log("Looks like a downArrow attack");
 
       enemiesArray.forEach((enemy) => {
         if (enemy.symbols[0] === "v") {
@@ -307,7 +339,7 @@ class Champion {
 
       //===================
     } else if (circleArray.find((element) => element === userAttack)) {
-      console.log("Looks like a circle attack");
+      // console.log("Looks like a circle attack");
       enemiesArray.forEach((enemy) => {
         if (enemy.symbols[0] === "O") {
           enemy.symbols.shift();
@@ -352,7 +384,7 @@ function startGame() {
 function pauseAnimations() {
   enemiesArray.forEach((element) => {
     document.getElementById(element.id).classList.toggle("enemyMoves");
-    console.log(document.getElementById(element.id));
+    // console.log(document.getElementById(element.id));
   });
 }
 
