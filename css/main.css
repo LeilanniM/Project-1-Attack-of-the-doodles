@@ -132,7 +132,8 @@ main {
   /* animation: slides 7s linear; */
   animation-name: slides;
   animation-duration: 10s;
-  animation-iteration-count: 1;
+  animation-iteration-count: infinite;
+
   animation-timing-function: linear;
 }
 
@@ -140,7 +141,8 @@ main {
   /* animation: slides 7s linear; */
   animation-name: slides;
   animation-duration: 6s;
-  animation-iteration-count: 1;
+  animation-iteration-count: infinite;
+
   animation-timing-function: linear;
 }
 
@@ -148,7 +150,8 @@ main {
   /* animation: slides 7s linear; */
   animation-name: slides;
   animation-duration: 2s;
-  animation-iteration-count: 1;
+  animation-iteration-count: infinite;
+
   animation-timing-function: linear;
 }
 
@@ -192,7 +195,7 @@ main {
   }
   100% {
     top: 274px;
-    left: 499px;
+    left: 357px;
   }
 }
 
@@ -284,9 +287,9 @@ main {
   height: 100%;
   width: 31px;
 }
-/* =========================== OVERLAY FOR GAME OVER =========================== */
+/* =========================== WINNING OVERLAY FOR GAME OVER =========================== */
 
-.overlay {
+.winningOverlay {
   position: absolute; /* Sit on top of the page content */
   width: 100%; /* Full width (cover the whole page) */
   height: 100%; /* Full height (cover the whole page) */
@@ -298,7 +301,26 @@ main {
 
   /* innerHTML styling */
   text-align: center;
-  padding-top: 270px;
+  padding-top: 39px;
+  font-size: 100px;
+  font-family: "Modak", cursive;
+  color: #6b5656;
+}
+/* =========================== LOOSING OVERLAY FOR GAME OVER =========================== */
+
+.loosingOverlay {
+  position: absolute; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.34); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  pointer-events: none; /* Looked up how to make OVERLAY not Clickable. */
+
+  /* innerHTML styling */
+  text-align: center;
+  padding-top: 39px;
   font-size: 100px;
   font-family: "Modak", cursive;
   color: #6b5656;

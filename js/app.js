@@ -151,6 +151,50 @@ class Enemy {
       main.appendChild(enemyHtml);
 
       setTimeout(() => {
+        enemyHtml.classList.toggle("appear"); //removing "appear" class
+        enemyHtml.addEventListener("animationend", () => {
+          console.log(`SPONGEBOB SAYS: OUCH!`);
+          doodleChampion.hearts = doodleChampion.hearts - 1;
+          lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
+          enemyHtml.remove(); //======================================poof before?
+          enemiesArray = enemiesArray.filter(
+            (element) => element.id !== this.id
+          ); //removing enemy from array by assigning enemiesArray a new value
+
+          //=======
+          if (doodleChampion.hearts === 0) {
+            championDiv.remove();
+
+            gameOver.classList.add("loosingOverlay");
+            gameOver.innerHTML = "GAME OVER";
+          } else if (allWaves.indexOf(currentWave) !== allWaves.length - 1) {
+            //if we're not at the last wave
+            this.respawn();
+          }
+        }); //end of animationend eventListener
+        //========================
+        if (
+          this.type === "bossBaddie1" ||
+          this.type === "bossBaddie2" ||
+          this.type === "bossBaddie3"
+        ) {
+          enemyHtml.addEventListener("animationiteration", () => {
+            enemyHtml.animationDelay = "1s";
+            console.log(`SPONGEBOB SAYS: OUCH!`);
+            doodleChampion.hearts = doodleChampion.hearts - 1;
+            lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
+            //=======
+            if (doodleChampion.hearts === 0) {
+              championDiv.remove();
+
+              enemyHtml.style.animationFillMode = "forwards"; //?????????????////?????????????/
+
+              gameOver.classList.add("loosingOverlay");
+              gameOver.innerHTML = "GAME OVER";
+            }
+          });
+        }
+
         if (this.type === "bossBaddie1") {
           enemyHtml.classList.add("boss1Moves");
         } else if (this.type === "bossBaddie2") {
@@ -158,10 +202,8 @@ class Enemy {
         } else if (this.type === "bossBaddie3") {
           enemyHtml.classList.add("boss3Moves");
         } else {
-          enemyHtml.classList.add("enemyMoves");
+          enemyHtml.classList.add("enemyMoves"); //regular folks
         }
-
-        enemyHtml.classList.toggle("appear");
       }, 1000);
     }, 0);
   }
@@ -187,59 +229,75 @@ class Enemy {
       baddieDiv.remove(); //removing enemy's HTML
       enemiesArray = enemiesArray.filter((element) => element.id !== this.id); //removing enemy from array by assigning enemiesArray a new value
       if (currentBaddie === "bossBaddie3") {
-        gameOver.classList.add("overlay");
+        gameOver.classList.add("winningOverlay");
+        gameOver.innerHTML = `LEVEL CLEARED, SCORE: ${doodleChampion.score}`;
+      } else if (allWaves.indexOf(currentWave) !== allWaves.length - 1) {
+        this.respawn();
+      }
+    }, 600);
+  } //end of die()
+
+  attack() {
+    const currentBaddie = this.type;
+
+    let baddieDiv = document.getElementById(this.id);
+    baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
+
+    setTimeout(() => {
+      baddieDiv.remove(); //removing enemy's HTML
+      enemiesArray = enemiesArray.filter((element) => element.id !== this.id); //removing enemy from array by assigning enemiesArray a new value
+      if (currentBaddie === "bossBaddie3") {
+        gameOver.classList.add("winningOverlay");
         gameOver.innerHTML = `LEVEL CLEARED, SCORE: ${doodleChampion.score}`;
       } else if (!(allWaves.indexOf(currentWave) === allWaves.length - 1)) {
         this.respawn();
       }
     }, 600);
-  }
+  } // end of vanish()
 
   respawn() {
     if (enemiesArray.length === 0) {
       currentWave = allWaves[allWaves.indexOf(currentWave) + 1];
-      // console.log(currentWave);
-      // console.log(allWaves.indexOf(currentWave));
+
       generateBaddies(currentWave);
     }
   }
 
-  attack() {
-    let enemy = document.getElementById(this.id);
+  // attack() {
+  //   let enemy = document.getElementById(this.id);
 
-    // if enemy is still on screen (exists)
-    if (enemy) {
-      let myMain = document.getElementById("myMain");
-      let mainCoordinates = myMain.getBoundingClientRect();
-      let enemyEndingCoordinates = enemy.getBoundingClientRect();
-      // console.log(this);
-      // console.log(enemyEndingCoordinates);
-      // console.log(mainCoordinates);
-      let x = Math.abs(enemyEndingCoordinates.left - mainCoordinates.left);
-      let y = Math.abs(enemyEndingCoordinates.top - mainCoordinates.top);
-      // console.log(x);
-      // console.log(y);
-      // if(enemyEndingCoordinates.left >= 438 && enemyEndingCoordinates.top >= 644){} // ASK ABOUT THIS
+  //   // if enemy is still on screen (exists)
+  //   if (enemy) {
+  //     let myMain = document.getElementById("myMain");
+  //     let mainCoordinates = myMain.getBoundingClientRect();
+  //     let enemyEndingCoordinates = enemy.getBoundingClientRect();
 
-      // enemy.classList.toggle("enemyCss");
-      // enemy.remove();
-      // enemiesArray = enemiesArray.filter((element) => element.isDead !== true);
-      // let leftOffset = enemy.documentOffsetLeft;
-      // console.log(leftOffset);
-      //==========================================================
-      // if (leftOffset >= 670 || leftOffset <= 675) {
-      doodleChampion.hearts = doodleChampion.hearts - 1;
-      lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
-      //=======
-      if (doodleChampion.hearts === 0) {
-        championDiv.remove();
+  //     let x = Math.abs(enemyEndingCoordinates.left - mainCoordinates.left);
+  //     let y = Math.abs(enemyEndingCoordinates.top - mainCoordinates.top);
+  //     // console.log(x);
+  //     // console.log(y);
+  //     // if(enemyEndingCoordinates.left >= 438 && enemyEndingCoordinates.top >= 644){} // ASK ABOUT THIS
 
-        gameOver.classList.add("overlay");
-        gameOver.innerHTML = "GAME OVER";
-        // }
-      }
-    }
-  } //end of attack()
+  //     // enemy.classList.toggle("enemyCss");
+  //     // enemy.remove();
+  //     // enemiesArray = enemiesArray.filter((element) => element.isDead !== true);
+  //     // let leftOffset = enemy.documentOffsetLeft;
+  //     // console.log(leftOffset);
+  //     //==========================================================
+  //     if (x >= 268 || x <= 461) {
+  //       console.log(`SPONGEBOB SAYS: OUCH!`);
+  //       doodleChampion.hearts = doodleChampion.hearts - 1;
+  //       lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
+  //       //=======
+  //       if (doodleChampion.hearts === 0) {
+  //         championDiv.remove();
+
+  //         gameOver.classList.add("loosingOverlay");
+  //         gameOver.innerHTML = "GAME OVER";
+  //       }
+  //     }
+  //   }
+  // } //end of attack()
 } //end of class
 
 //=================== GENERATE BADDIES FUNCTION ==========================================
@@ -270,7 +328,7 @@ function generateBaddies(currentWave) {
 class Champion {
   constructor(name) {
     this.name;
-    this.hearts = 4; //aka lives/health
+    this.hearts = 5; //aka lives/health
     this.score = 0;
     this.isDead = false; //so far not using it........................REMOVE
   } //end of constructor
@@ -392,7 +450,7 @@ class Champion {
 //================== INSTANTIATING OUR CHAMPION ==========================================
 
 const doodleChampion = new Champion("champion"); // 'champion' goes to this.name but it is irrelevant for now.
-lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
+// lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
 
 //=================================== START BUTTON ======================================
 
