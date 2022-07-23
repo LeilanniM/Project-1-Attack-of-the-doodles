@@ -22,8 +22,6 @@ const allWaves = [
     { symbols: ["_"], id: 1, top: -20, left: 140, delay: 1 },
     { symbols: ["l"], id: 2, top: 68, left: 10, delay: 2 },
     { symbols: ["_"], id: 3, top: 230, left: 778, delay: 3 },
-    // { symbols: ["n"], id: 4, top: 455, left: 495, delay: 1 },
-    // { symbols: ["O"], id: 5, top: -28, left: 793, delay: 1 },
   ],
   [
     { symbols: ["l"], id: 4, top: -20, left: 140, delay: 0 },
@@ -40,7 +38,6 @@ const allWaves = [
     { symbols: ["l", "n", "_"], id: 11, top: -20, left: 140, delay: 1 },
     { symbols: ["_", "l"], id: 12, top: 230, left: 778, delay: 1 },
   ],
-
   [
     { symbols: ["l"], id: 13, top: -38, left: -57, delay: 1 },
     { symbols: ["n"], id: 14, top: 127, left: -60, delay: 1 },
@@ -52,17 +49,48 @@ const allWaves = [
     { symbols: ["_"], id: 19, top: 268, left: 783, delay: 1 },
     { symbols: ["v"], id: 20, top: 424, left: 785, delay: 1 },
   ],
+  [
+    { symbols: ["v"], id: 13, top: -38, left: -57, delay: 1 },
+    { symbols: ["_"], id: 14, top: 127, left: -60, delay: 1 },
+    { symbols: ["n"], id: 15, top: 268, left: -52, delay: 1 },
+    { symbols: ["l"], id: 16, top: 406, left: -57, delay: 1 },
 
-  // [
-  //   { symbols: ["l", "v", "_"], id: 6, top: 466, left: 801, delay: 1 },
-  //   { symbols: ["l", "O", "v"], id: 7, top: -32, left: 640, delay: 1 },
-  //   { symbols: ["n", "v", "O"], id: 8, top: -28, left: -39, delay: 1 },
-  // ],
-  // [
-  //   { symbols: ["O", "n", "_"], id: 9, top: 436, left: -37, delay: 1 },
-  //   { symbols: ["_", "O", "l"], id: 10, top: -43, left: -8, delay: 1 },
-  //   { symbols: ["v", "l", "O"], id: 11, top: -37, left: 639, delay: 1 },
-  // ],
+    { symbols: ["l"], id: 17, top: -33, left: 785, delay: 1 },
+    { symbols: ["n"], id: 18, top: 127, left: 788, delay: 1 },
+    { symbols: ["_"], id: 19, top: 268, left: 783, delay: 1 },
+    { symbols: ["v"], id: 20, top: 424, left: 785, delay: 1 },
+  ],
+
+  [
+    {
+      symbols: ["n", "_", "n", "l", "n", "_", "n", "l"],
+      id: 21,
+      top: 366,
+      left: 812,
+      delay: 1,
+      type: "bossBaddie1",
+    },
+  ],
+  [
+    {
+      symbols: ["v", "_", "n", "_", "v", "_", "n", "_"],
+      id: 22,
+      top: 366,
+      left: 812,
+      delay: 1,
+      type: "bossBaddie2",
+    },
+  ],
+  [
+    {
+      symbols: ["l", "_", "l", "_", "_", "l"],
+      id: 23,
+      top: 366,
+      left: 812,
+      delay: 1,
+      type: "bossBaddie3",
+    },
+  ],
 ];
 
 let enemiesArray = [];
@@ -72,20 +100,31 @@ let currentWave = allWaves[0];
 //=================== ENEMY CLASS ========================================================
 
 class Enemy {
-  constructor(symbols, id, top, left, delay) {
+  constructor(symbols, id, top, left, delay, type = "normalBaddie") {
     this.symbols = symbols; //array
     this.id = `baddie-${id}`;
     this.top = top;
     this.left = left;
     this.isDead = false;
     this.delay = delay;
+    this.type = type;
   }
 
   createHtml() {
     //appears on screen
 
     let enemyDiv = document.createElement("div");
-    enemyDiv.classList.add("enemyCss");
+
+    if (
+      this.type === "bossBaddie1" ||
+      this.type === "bossBaddie2" ||
+      this.type === "bossBaddie3"
+    ) {
+      enemyDiv.classList.add("boss");
+    } else {
+      enemyDiv.classList.add("enemyCss");
+    }
+
     enemyDiv.setAttribute("id", this.id);
 
     enemyDiv.style.top = `${this.top}px`;
@@ -111,17 +150,18 @@ class Enemy {
       enemyHtml.classList.toggle("appear");
       main.appendChild(enemyHtml);
 
-      let enemy = document.getElementById(this.id);
-      let enemyEndingCoordinates = enemy.getBoundingClientRect();
-      // console.log(enemyEndingCoordinates);
-
       setTimeout(() => {
-        enemyHtml.classList.toggle("appear");
-        enemyHtml.classList.toggle("enemyMoves"); //starts moving and lasts 7 secs
+        if (this.type === "bossBaddie1") {
+          enemyHtml.classList.add("boss1Moves");
+        } else if (this.type === "bossBaddie2") {
+          enemyHtml.classList.add("boss2Moves");
+        } else if (this.type === "bossBaddie3") {
+          enemyHtml.classList.add("boss3Moves");
+        } else {
+          enemyHtml.classList.add("enemyMoves");
+        }
 
-        // setTimeout(() => {
-        //   this.attack();
-        // }, 6000);
+        enemyHtml.classList.toggle("appear");
       }, 1000);
     }, 0);
   }
@@ -141,6 +181,7 @@ class Enemy {
     let y = Math.abs(enemyEndingCoordinates.top - (mainCoordinates.top + 18));
 
     // console.log(this.id);
+
     baddieDiv.setAttribute("class", "poof"); //this will overwrite any previous classes
     baddieDiv.style.top = `${y}px`;
     baddieDiv.style.left = `${x}px`;
@@ -149,7 +190,7 @@ class Enemy {
 
     setTimeout(() => {
       baddieDiv.remove(); //removing enemy's HTML
-      enemiesArray = enemiesArray.filter((element) => element.isDead !== true); //removing enemy from array by assigning enemiesArray a new value
+      enemiesArray = enemiesArray.filter((element) => element.id !== this.id); //removing enemy from array by assigning enemiesArray a new value
 
       console.log(enemiesArray);
 
@@ -217,7 +258,8 @@ function generateBaddies(currentWave) {
       element.id,
       element.top,
       element.left,
-      element.delay
+      element.delay,
+      element.type
     );
 
     setTimeout(() => {
@@ -372,7 +414,7 @@ lifeMeter.innerHTML = `HEARTS: ${doodleChampion.hearts}`;
 
 function startGame() {
   //testing growing baddie
-  document.getElementById("test").classList.add("grow");
+  // document.getElementById("test").classList.add("grow");
 
   startButton.remove();
 

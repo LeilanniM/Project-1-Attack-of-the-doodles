@@ -102,7 +102,7 @@ main {
   width: 230px;
   height: 195px;
   top: 300px;
-  left: 402px;
+  left: 362px;
   /* background-color: blue; */
 }
 
@@ -118,7 +118,41 @@ main {
   border: 2px solid black;
 }
 
-#test {
+.boss {
+  position: absolute;
+  width: 235px;
+  height: 229px;
+  background: url(../images/monophy.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: 2px solid red;
+}
+
+.boss1Moves {
+  /* animation: slides 7s linear; */
+  animation-name: slides;
+  animation-duration: 10s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+
+.boss2Moves {
+  /* animation: slides 7s linear; */
+  animation-name: slides;
+  animation-duration: 6s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+
+.boss3Moves {
+  /* animation: slides 7s linear; */
+  animation-name: slides;
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+
+/* #test {
   position: absolute;
   width: 63px;
   height: 64px;
@@ -128,7 +162,7 @@ main {
   border: 2px solid black;
   top: -21px;
   left: 566px;
-}
+} */
 
 .grow {
   animation: grow 10s;
@@ -148,8 +182,9 @@ main {
 
 .enemyMoves {
   /* animation: slides 7s linear; */
-  animation: slides 12s;
+  animation: slides 7s;
   animation-iteration-count: 1;
+  animation-timing-function: linear;
 }
 
 @keyframes slides {
@@ -275,8 +310,8 @@ main {
   position: absolute;
   height: 54px;
   width: 158px;
-  top: 480px;
-  left: 452px;
+  top: 443px;
+  left: 400px;
   border-radius: 15px;
   font-size: 40px;
   z-index: 100; /*to bring it to the front of the z index (screen)(layer) */
